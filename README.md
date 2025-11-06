@@ -1,3 +1,5 @@
+<img src="imagen.png" alt="Gestor de Videojuegos - estilo ciberpunk" width="800" />
+
 # 🎮 Gestor de Videojuegos — Proyecto en Python 🐍  
 
 <p align="center">

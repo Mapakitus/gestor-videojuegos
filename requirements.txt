@@ -1,0 +1,4 @@
+#Para instalar: pip install -r requirements.txt
+
+fastapi[standard]==0.119.1
+sqlalchemy==2.0.44

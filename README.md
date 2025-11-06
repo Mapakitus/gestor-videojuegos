@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="images/gestor_de_videojuegos.png" alt="Gestor de Videojuegos Banner" width="800">
+</p>
+
 # 🎮 Gestor de Videojuegos — Proyecto en Python 🐍  
 
 <p align="center">

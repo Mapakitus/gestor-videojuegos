@@ -59,3 +59,45 @@ Este trabajo forma parte del curso **Python + IA**, y tiene como finalidad refor
    ```bash
    git clone https://github.com/Mapakitus/gestor-videojuegos.git
 
+
+---
+
+## GESTOR VIDEOJUEGOS
+
+### Videojuego
+- titulo: string
+- genero: string
+- desarrolladora_id: int
+- precio_base: float
+- online (opcional): boolean
+- plataforma (opcional): string/enum
+- tipo (opcional): string/enum (triple A, indie, ...)
+- fecha_lanzamiento: datetime
+- total_ventas: int
+
+### Desarrolladora
+- nombre: string
+- pais (opcional): string
+- anyo_fundacion (opcional): int
+- total_ventas: int
+
+### Compra
+- videojuego_id: int
+- usuario_id: int
+- precio_total: float
+- fecha_compra: datetime
+- codigo_descuento (opcional): string
+
+### Resenya
+- calificacion: int
+- comentario (opcional): str
+- usuario_id: int
+- videojuego_id: int
+
+### Usuario
+- username: string
+- email: string
+- password_hash: str
+- fecha_registro: datetime
+
+

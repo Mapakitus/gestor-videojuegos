@@ -62,7 +62,7 @@ Este trabajo forma parte del curso **Python + IA**, y tiene como finalidad refor
 
 ---
 
-## GESTOR VIDEOJUEGOS
+## GESTOR VIDEOJUEGOS (ENTIDADES)
 
 ### Videojuego
 - titulo: string

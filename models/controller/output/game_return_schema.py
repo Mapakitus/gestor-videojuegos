@@ -1,0 +1,1 @@
+# al devolver datos por la api, se usará este esquema, en la carpeta input se usarán otros esquemas para recibir datos desde el cliente

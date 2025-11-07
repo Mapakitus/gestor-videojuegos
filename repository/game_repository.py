@@ -1,0 +1,1 @@
+# este archivo estará en contacto con la base de datos y realizará las operaciones CRUD, trabajará con modelos de db y modelos de dominio que mapeará

@@ -1,0 +1,1 @@
+la carpeta docs se usará para compartir archivos y material que no estará en el proyecto

@@ -1,0 +1,1 @@
+# modelo de sqlalchemy para juegos

@@ -6,4 +6,3 @@ class DeveloperModel(BaseModel):
     name: str = Field(..., description="Nombre del desarrollador")
     founded_date: Optional[str] = Field(None, description="Fecha de fundación del desarrollador en formato YYYY-MM-DD")
     country: Optional[str] = Field(None, description="País de origen del desarrollador")
-    website: Optional[str] = Field(None, description="Sitio web oficial del desarrollador")

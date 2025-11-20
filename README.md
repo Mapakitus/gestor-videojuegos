@@ -63,13 +63,13 @@ Este trabajo forma parte del curso **Python + IA**, y tiene como finalidad refor
 
 ## GESTOR VIDEOJUEGOS (ENTIDADES)
 
-### Videojuego # (ManyToOne con Genero, ManyToOne Desarrolladora)
+## Videojuego # (ManyToOne con Genero, ManyToOne Desarrolladora)
 
-### Genero
+## Genero
 
 ## Desarroladora
 
-### Usuario
+## Usuario
 - id
 - email
 - nif

@@ -33,10 +33,9 @@ Este trabajo forma parte del curso **Python + IA**, y tiene como finalidad refor
 
 ## 👥 Equipo de desarrollo  
 
-| Integrante 
+| Integrantes
 |------------- 
 | Paco Gutiérrez Frías 
-| Pablo Acebrón Herranz
 | Lueyo Suárez González 
 | Jon Fernandes Aizcorbe
 
@@ -100,4 +99,36 @@ Este trabajo forma parte del curso **Python + IA**, y tiene como finalidad refor
 - password_hash: str
 - fecha_registro: datetime
 
+### CLASE 20/11/2025
 
+Temática: Gestor de videojuegos: Videojuego, Genero, Desarrolladora, Usuario...
+
+Repo: https://github.com/Mapakitus/gestor-videojuegos
+
+Paco
+Jon
+Lueyo
+
+[OK] mover rama lueyo
+[OK] resetear main:
+Opción 1: deshacer ultimos 8 commits:
+git reset --hard HEAD~8
+git push --force
+Opción 2:
+manualmente colocar todo a un estado deseado
+[] Entidades:
+Videojuego (ManyToOne con Genero, ManyToOne Desarrolladora) (Paco)
+Genero (Jon)
+Desarrolladora (Lueyo)
+Usuario (id, email, nif, password, saldo) (Lueyo)
+Review (ManyToOne Videojuego, ManyToOne Usuario)
+Compra (ManyToOne Videojuego, ManyToOne Usuario)
+Schemas pydantic
+API REST CRUD
+HTMLs
+Opcional autenticación:
+registro.html
+login.html
+lógica para detectar el usuario autenticado en los controladores
+opción simple:
+no hacer registro ni login, simplemente tener un usuario en base datos y vincular cada operación de Review o Compra a ese usuario

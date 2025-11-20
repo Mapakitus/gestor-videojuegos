@@ -36,6 +36,7 @@ Este trabajo forma parte del curso **Python + IA**, y tiene como finalidad refor
 | Integrante 
 |------------- 
 | Paco Gutiérrez Frías 
+| Pablo Acebrón Herranz
 | Lueyo Suárez González 
 | Jon Fernandes Aizcorbe
 

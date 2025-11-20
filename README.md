@@ -36,7 +36,6 @@ Este trabajo forma parte del curso **Python + IA**, y tiene como finalidad refor
 | Integrante 
 |------------- 
 | Paco Gutiérrez Frías 
-| Pablo Acebrón Herranz
 | Lueyo Suárez González 
 | Jon Fernandes Aizcorbe
 
@@ -64,40 +63,28 @@ Este trabajo forma parte del curso **Python + IA**, y tiene como finalidad refor
 
 ## GESTOR VIDEOJUEGOS (ENTIDADES)
 
-### Videojuego
-- titulo: string
-- genero: string
-- desarrolladora_id: int
-- precio_base: float
-- online (opcional): boolean
-- plataforma (opcional): string/enum
-- tipo (opcional): string/enum (triple A, indie, ...)
-- fecha_lanzamiento: datetime
-- total_ventas: int
+### Videojuego # (ManyToOne con Genero, ManyToOne Desarrolladora)
 
-### Desarrolladora
-- nombre: string
-- pais (opcional): string
-- anyo_fundacion (opcional): int
-- total_ventas: int
+### Genero
 
-### Compra
-- videojuego_id: int
-- usuario_id: int
-- precio_total: float
-- fecha_compra: datetime
-- codigo_descuento (opcional): string
-
-### Resenya
-- calificacion: int
-- comentario (opcional): str
-- usuario_id: int
-- videojuego_id: int
+## Desarroladora
 
 ### Usuario
-- username: string
-- email: string
-- password_hash: str
-- fecha_registro: datetime
+- id
+- email
+- nif
+- password
+- saldo
+
+## Review # (ManyToOne Videojuego, ManyToOne Usuario)
+
+## Compra # (ManyToOne Videojuego, ManyToOne Usuario)
+
+
+## Opcional autenticación:
+- registro.html
+- login.html
+- lógica para detectar el usuario autenticado en los controladores
+- opción simple: no hacer registro ni login, simplemente tener un usuario en base datos y vincular cada operación de Review o Compra a ese usuario
 
 

@@ -1,1 +1,0 @@
-# cargará las variables de entorno desde un archivo .env

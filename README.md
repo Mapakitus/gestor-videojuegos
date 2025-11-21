@@ -81,7 +81,7 @@ Este trabajo forma parte del curso **Python + IA**, y tiene como finalidad refor
 - email
 - nif
 - password
-- saldo
+
 
 ## Review # (ManyToOne Videojuego, ManyToOne Usuario)
 
@@ -97,3 +97,18 @@ Este trabajo forma parte del curso **Python + IA**, y tiene como finalidad refor
 - lógica para detectar el usuario autenticado en los controladores
 - opción simple: no hacer registro ni login, simplemente tener un usuario en base datos y vincular cada operación de Review o Compra a ese usuario
 
+🎮 Nuevo Modelo de Plataforma (tipo Netflix)
+
+Puntos clave:
+
+No hay precio en videojuegos.
+
+No hay saldo en usuarios.
+
+Los usuarios pagan la suscripción (fuera del alcance de este proyecto).
+
+Pueden añadir videojuegos a su catálogo personal (como si “compraran”).
+
+Cuando añaden uno, reciben una clave única de descarga (tipo Steam key).
+
+Solo pueden dejar review de los juegos que tienen en su catálogo.

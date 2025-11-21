@@ -7,7 +7,7 @@ from sqlalchemy.orm import sessionmaker, DeclarativeBase
 
 # crear motor de conexión a base de datos
 engine = create_engine(
-    "sqlite:///videojuegos.db",
+    "sqlite:///videogames.db",
     echo=True,
     connect_args={"check_same_thread": False}
 )

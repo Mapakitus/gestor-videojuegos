@@ -70,22 +70,39 @@ Este trabajo forma parte del curso **Python + IA**, y tiene como finalidad refor
     -manualmente colocar todo a un estado deseado
 ## GESTOR VIDEOJUEGOS (ENTIDADES)
 
-## Videojuego # (ManyToOne con Genero, ManyToOne Desarrolladora) (Paco)
+## Videogame # (ManyToOne con Genero, ManyToOne Desarrolladora) (Paco)
+- id
+- title
+- description
+- genre_id (FK)
+- developer_id (FK)
 
-## Genero (Jon)
+## Genre (Jon)
+- id
+- name
 
-## Desarroladora (Lueyo)
+## Developer (Lueyo)
+- id
+- name
 
-## Usuario (Lueyo)
+## User (Lueyo)
 - id
 - email
 - nif
 - password
 
+## UserGame
+- id
+- user_id (FK)
+- videogame_id (FK)
+- download_key (String único generado automáticamente)
 
-## Review # (ManyToOne Videojuego, ManyToOne Usuario)
-
-## Compra # (ManyToOne Videojuego, ManyToOne Usuario)
+## Review
+- id
+- rating
+- comment
+- user_id (FK)
+- videogame_id (FK)
 
 ## Schemas pydantic
   - API REST CRUD

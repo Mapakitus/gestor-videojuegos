@@ -22,7 +22,7 @@ def find_by_id(id: int, db: Session = Depends(get_db)):
     
     return genre
 
-@router.post("",status_code=status.HTTP_201_CREATED, response_mode=GenreResponse)
+@router.post("",status_code=status.HTTP_201_CREATED, response_model=GenreResponse)
 def create(genre_dto: GenreCreate, db: Session = Depends(get_db)):
     new_genre = GenreORM(
         name=genre_dto.name,

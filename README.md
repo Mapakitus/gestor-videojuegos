@@ -101,8 +101,8 @@ Este trabajo forma parte del curso **Python + IA**, y tiene como finalidad refor
 - id
 - rating
 - comment
-- user_id (FK)
-- videogame_id (FK)
+- usergame_id (FK)
+
 
 ## Schemas pydantic
   - API REST CRUD

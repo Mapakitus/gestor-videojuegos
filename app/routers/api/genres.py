@@ -5,11 +5,11 @@ from app.database import get_db
 from sqlalchemy.orm import Session
 from app.models.genre import GenreORM
 
-
+# create router for endpoints
 router = APIRouter(prefix="/api/generos", tags=["generos"])
 
 # GET - retrieve ALL genres
-@router.get("", response_model=GenreResponse)
+@router.get("", response_model=list[GenreResponse])
 def find_all(db: Session = Depends(get_db)):
     return db.execute(select(GenreORM)).scalars().all()
 
@@ -18,7 +18,7 @@ def find_by_id(id: int, db: Session = Depends(get_db)):
     genre = db.execute(select(GenreORM).where(GenreORM.id == id)).scalar_one_or_none()
 
     if not genre:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"No existe ningún género con el id {id}")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"No existe ningún género con el id {id}")
     
     return genre
 
@@ -60,7 +60,7 @@ def update_partial(id: int, genre_dto: GenrePatch, db: Session = Depends(get_db)
     if not genre:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"No existe el género con el id {id}")
    
-    update_data = genre_dto.model_dump()
+    update_data = genre_dto.model_dump(exclude_unset=True)
 
     for field, value in update_data.items():
         setattr(genre, field, value)

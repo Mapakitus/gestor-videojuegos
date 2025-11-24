@@ -4,6 +4,8 @@ Configuración de la base de datos
 
 from sqlalchemy import create_engine, select
 from sqlalchemy.orm import sessionmaker, DeclarativeBase
+from app.models.videogame import Videogame
+
 
 # crear motor de conexión a base de datos
 engine = create_engine(

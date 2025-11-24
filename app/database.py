@@ -3,18 +3,26 @@ Configuración de la base de datos
 """
 
 from sqlalchemy import create_engine, select
-from sqlalchemy.orm import sessionmaker, DeclarativeBase
-from app.models.videogame import Videogame
+from sqlalchemy.orm import sessionmaker, DeclarativeBase, Session
 
+# -------------------------
+# Clase base para modelos SQLAlchemy
+# -------------------------
+class Base(DeclarativeBase):
+    pass
 
-# crear motor de conexión a base de datos
+# -------------------------
+# Motor de conexión a la base de datos
+# -------------------------
 engine = create_engine(
     "sqlite:///videogames.db",
     echo=True,
     connect_args={"check_same_thread": False}
 )
 
-# crear fábrica de sesiones de base de datos
+# -------------------------
+# Fábrica de sesiones
+# -------------------------
 SessionLocal = sessionmaker(
     bind=engine,
     autocommit=False,
@@ -22,53 +30,54 @@ SessionLocal = sessionmaker(
     expire_on_commit=False
 )
 
-# clase base para modelos sqlalchemy
-class Base(DeclarativeBase):
-    pass
-
-# DEPENDENCIA DE FASTAPI
-
+# -------------------------
+# Dependencia para FastAPI
+# -------------------------
 def get_db():
     db = SessionLocal()
     try:
-        yield db # entrega la sesión al endpoint
+        yield db
     finally:
         db.close()
 
-
-# INICIALIZACIÓN BASE DE DATOS
-
-# método inicializar con canciones por defecto
+# -------------------------
+# Inicialización de la base de datos
+# -------------------------
 def init_db():
-    """
-    Inicializa la base de datos con datos por defecto si está vacía.
-    Sólo crea los datos si no existen ya en la base de datos.
-    """
-    from app.models import Videogame
-    
-    # crear todas las tablas
+    # Importar modelos aquí dentro para evitar circular imports
+    from app.models.genre import GenreORM
+    from app.models.videogame import Videogame
+    from app.models.developer import Developer
+
+    # Crear todas las tablas
     Base.metadata.create_all(engine)
-    
+
     db = SessionLocal()
     try:
-        existing_videogames = db.execute(select(Videogame)).scalars().all()
-        
-        if existing_videogames:
+        # Si ya hay géneros, asumimos que la DB ya tiene datos
+        if db.query(GenreORM).first():
             return
+
+        # Crear géneros de ejemplo
+        action = GenreORM(name="Acción", description="Juegos de acción")
+        adventure = GenreORM(name="Aventuras", description="Juegos de aventuras")
+        rpg = GenreORM(name="Rol", description="Juegos de rol")
+        db.add_all([action, adventure, rpg])
+        db.commit()
         
-        default_videogames = [
-            Videogame(title="Mamma Mia", artist="ABBA", duration_seconds=300, explicit=False),
-            Videogame(title="Sin ti no soy nada", artist="Amaral", duration_seconds=250, explicit=False),
-            Videogame(title="Sonata para piano nº 14", artist="Ludwig van Beethoven", duration_seconds=800, explicit=False),
-            Videogame(title="Mediterráneo", artist="Joan Manuel Serrat", duration_seconds=400, explicit=False),
-            Videogame(title="Never to Return", artist="Darren Korb", duration_seconds=300, explicit=False),
-            Videogame(title="Billie Jean", artist="Michael Jackson", duration_seconds=294, explicit=False),
-            Videogame(title="Smells Like Teen Spirit", artist="Nirvana", duration_seconds=301, explicit=True)
-        ]
-        
-        # agregar las canciones
-        db.add_all(default_videogames)
+         # Crear developers
+        dev1 = Developer(name="Dev Studio 1")
+        dev2 = Developer(name="Dev Studio 2")
+        dev3 = Developer(name="Dev Studio 3")
+        db.add_all([dev1, dev2, dev3])
+        db.commit()
+
+        # Crear videojuegos de ejemplo
+        db.add_all([
+            Videogame(title="Super Action Game", description="Juego de acción épico", genre_id=action.id, developer_id=1),
+            Videogame(title="Adventure Quest", description="Explora mundos fantásticos", genre_id=adventure.id, developer_id=2),
+            Videogame(title="RPG Legends", description="RPG clásico con héroes y mazmorras", genre_id=rpg.id, developer_id=3)
+        ])
         db.commit()
     finally:
         db.close()
-        

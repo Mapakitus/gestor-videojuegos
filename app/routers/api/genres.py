@@ -51,6 +51,7 @@ def update_full(id: int, genre_dto: GenreUpdate, db: Session = Depends(get_db)):
 
     db.commit()
     db.refresh(genre)
+    
     return genre
 
 @router.patch("/{id}", response_model=GenreResponse)
@@ -67,6 +68,7 @@ def update_partial(id: int, genre_dto: GenrePatch, db: Session = Depends(get_db)
 
     db.commit()
     db.refresh(genre)
+
     return genre
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -78,4 +80,5 @@ def delete(id: int, db: Session = Depends(get_db)):
     
     db.delete(genre)
     db.commit()
+
     return None

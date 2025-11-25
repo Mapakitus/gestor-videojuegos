@@ -16,4 +16,12 @@ from app.schemas.genre import (
     GenrePatch
 )
 
-__all__ = ["VideogameResponse", "VideogameCreate", "VideogameUpdate", "VideogamePatch", "GenreResponse", "GenreCreate", "GenreUpdate", "GenrePatch"]
+from app.schemas.user import(
+    UserResponse,
+    UserCreate,
+    UserUpdate,
+    UserPatch
+)
+
+
+__all__ = ["VideogameResponse", "VideogameCreate", "VideogameUpdate", "VideogamePatch", "GenreResponse", "GenreCreate", "GenreUpdate", "GenrePatch", "UserResponse", "UserCreate", "UserUpdate", "UserPatch"]

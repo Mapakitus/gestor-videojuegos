@@ -13,6 +13,7 @@ class VideogameResponse(BaseModel):
     id: int
     title: str
     description: str | None
+    cover_url: str | None
     genre_id: int
     developer_id: int
    
@@ -20,6 +21,7 @@ class VideogameResponse(BaseModel):
 class VideogameCreate(BaseModel):
     title: str
     description: str | None = None
+    cover_url: str | None = None
     genre_id: int
     developer_id: int
 
@@ -45,6 +47,7 @@ class VideogameUpdate(BaseModel):
 
     title: str
     description: str | None
+    cover_url: str | None = None
     genre_id: int
     developer_id: int
 
@@ -70,6 +73,7 @@ class VideogamePatch(BaseModel):
 
     title: str | None = None
     description: str | None = None
+    cover_url: str | None = None
     genre_id: int | None = None
     developer_id: int | None = None
 

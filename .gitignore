@@ -205,3 +205,9 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+#Base de Datos
+*.db
+*.db-journal
+*.db-shm
+*.db-wal

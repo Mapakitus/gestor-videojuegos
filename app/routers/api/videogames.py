@@ -29,6 +29,7 @@ def create(videogame_dto: VideogameCreate, db: Session = Depends(get_db)):
     new_videogame = Videogame(
         title=videogame_dto.title,
         description=videogame_dto.description,
+        cover_url=videogame_dto.cover_url,
         genre_id=videogame_dto.genre_id,
         developer_id=videogame_dto.developer_id
     )

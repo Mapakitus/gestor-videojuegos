@@ -129,3 +129,11 @@ Pueden añadir videojuegos a su catálogo personal (como si “compraran”).
 Cuando añaden uno, reciben una clave única de descarga (tipo Steam key).
 
 Solo pueden dejar review de los juegos que tienen en su catálogo.
+
+## Notas imágenes:
+
+- Al crear o editar un videojuego, si usas una imagen de caratula local, poner en la url: 
+/static/covers/super_mario3.jpg
+
+-  Al crear o editar un videojuego, si usas una imagen de internet, poner en la url: 
+https://i.imgur.com/Hh3Yf7F.jpeg

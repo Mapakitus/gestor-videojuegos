@@ -15,7 +15,7 @@ class Videogame(Base):
     developer_id = Column(Integer, ForeignKey("developers.id"))
 
     genre = relationship("GenreORM")
-    developer = relationship("Developer")
+    developer = relationship("DevORM")
 
     #Temporalmente comentado hasta que se creen las tablas
     #reviews = relationship("Review", back_populates="videogame")

@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship
 from app.database import Base
 from app.models.videogame import Videogame
 
-class Developer(Base):
+class DevORM(Base):
     __tablename__ = "developers"
 
     id = Column(Integer, primary_key=True, autoincrement=True)

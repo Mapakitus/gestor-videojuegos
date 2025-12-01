@@ -23,5 +23,11 @@ from app.schemas.user import(
     UserPatch
 )
 
+from app.schemas.developer import(
+    DevResponse,
+    DevCreate,
+    DevUpdate,
+    DevPatch
+)
 
-__all__ = ["VideogameResponse", "VideogameCreate", "VideogameUpdate", "VideogamePatch", "GenreResponse", "GenreCreate", "GenreUpdate", "GenrePatch", "UserResponse", "UserCreate", "UserUpdate", "UserPatch"]
+__all__ = ["VideogameResponse", "VideogameCreate", "VideogameUpdate", "VideogamePatch", "GenreResponse", "GenreCreate", "GenreUpdate", "GenrePatch", "UserResponse", "UserCreate", "UserUpdate", "UserPatch", "DevResponse", "DevCreate", "DevUpdate", "DevPatch"]

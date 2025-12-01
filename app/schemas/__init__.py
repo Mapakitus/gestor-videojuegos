@@ -30,4 +30,11 @@ from app.schemas.developer import(
     DevPatch
 )
 
-__all__ = ["VideogameResponse", "VideogameCreate", "VideogameUpdate", "VideogamePatch", "GenreResponse", "GenreCreate", "GenreUpdate", "GenrePatch", "UserResponse", "UserCreate", "UserUpdate", "UserPatch", "DevResponse", "DevCreate", "DevUpdate", "DevPatch"]
+from app.schemas.review import(
+    ReviewResponse,
+    ReviewCreate,
+    ReviewUpdate,
+    ReviewPatch
+)
+
+__all__ = ["VideogameResponse", "VideogameCreate", "VideogameUpdate", "VideogamePatch", "GenreResponse", "GenreCreate", "GenreUpdate", "GenrePatch", "UserResponse", "UserCreate", "UserUpdate", "UserPatch", "DevResponse", "DevCreate", "DevUpdate", "DevPatch", "ReviewResponse", "ReviewCreate", "ReviewUpdate", "ReviewPatch"]

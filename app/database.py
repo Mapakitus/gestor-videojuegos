@@ -2,7 +2,7 @@
 Configuración de la base de datos
 """
 
-from sqlalchemy import create_engine, select
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, DeclarativeBase, Session
 
 # -------------------------
@@ -49,6 +49,7 @@ def init_db():
     from app.models.videogame import Videogame
     from app.models.developer import DevORM
     from app.models.user import UserORM
+    from app.models.review import Review
 
     # Crear todas las tablas
     Base.metadata.create_all(engine)
@@ -59,30 +60,47 @@ def init_db():
         if db.query(GenreORM).first():
             return
 
+        # -------------------------
         # Crear géneros de ejemplo
+        # -------------------------
         action = GenreORM(name="Acción", description="Juegos de acción")
         adventure = GenreORM(name="Aventuras", description="Juegos de aventuras")
         rpg = GenreORM(name="Rol", description="Juegos de rol")
         db.add_all([action, adventure, rpg])
         db.commit()
-        
-         # Crear developers
+
+        # -------------------------
+        # Crear developers de ejemplo
+        # -------------------------
         dev1 = DevORM(name="Dev Studio 1")
         dev2 = DevORM(name="Dev Studio 2")
         dev3 = DevORM(name="Dev Studio 3")
         db.add_all([dev1, dev2, dev3])
         db.commit()
 
+        # -------------------------
         # Crear videojuegos de ejemplo
-        db.add_all([
-            Videogame(title="Super Action Game", description="Juego de acción épico", genre_id=action.id, developer_id=1),
-            Videogame(title="Adventure Quest", description="Explora mundos fantásticos", genre_id=adventure.id, developer_id=2),
-            Videogame(title="RPG Legends", description="RPG clásico con héroes y mazmorras", genre_id=rpg.id, developer_id=3)
-        ])
+        # -------------------------
+        vg1 = Videogame(title="Super Action Game", description="Juego de acción épico", genre_id=action.id, developer_id=dev1.id)
+        vg2 = Videogame(title="Adventure Quest", description="Explora mundos fantásticos", genre_id=adventure.id, developer_id=dev2.id)
+        vg3 = Videogame(title="RPG Legends", description="RPG clásico con héroes y mazmorras", genre_id=rpg.id, developer_id=dev3.id)
+        db.add_all([vg1, vg2, vg3])
         db.commit()
 
-        db.add_all([
-            UserORM(nick="admin", email="admin@hotmail.es", nif="1231231231", password="admin1234")
-        ])
+        # -------------------------
+        # Crear usuarios de ejemplo
+        # -------------------------
+        user1 = UserORM(nick="admin", email="admin@hotmail.es", nif="1231231231", password="admin1234")
+        db.add(user1)
+        db.commit()
+
+        # -------------------------
+        # Crear reviews de ejemplo
+        # -------------------------
+        review1 = Review(rating=8.6, comment="Muy divertido", user_id=user1.id, videogame_id=vg1.id)
+        review2 = Review(rating=9.0, comment="Me encantó", user_id=user1.id, videogame_id=vg2.id)
+        db.add_all([review1, review2])
+        db.commit()
+
     finally:
         db.close()

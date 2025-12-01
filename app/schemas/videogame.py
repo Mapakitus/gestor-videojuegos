@@ -4,7 +4,6 @@ Esquemas Pydantic para estructura y validación de datos de videojuegos
 
 from pydantic import BaseModel, ConfigDict, field_validator
 
-from app.schemas.genre import GenreResponse
 
 
 # Modelo de respuesta (GET)

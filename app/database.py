@@ -47,7 +47,8 @@ def init_db():
     # Importar modelos aquí dentro para evitar circular imports
     from app.models.genre import GenreORM
     from app.models.videogame import Videogame
-    from app.models.developer import Developer
+    from app.models.developer import DevORM
+    from app.models.user import UserORM
 
     # Crear todas las tablas
     Base.metadata.create_all(engine)
@@ -66,9 +67,9 @@ def init_db():
         db.commit()
         
          # Crear developers
-        dev1 = Developer(name="Dev Studio 1")
-        dev2 = Developer(name="Dev Studio 2")
-        dev3 = Developer(name="Dev Studio 3")
+        dev1 = DevORM(name="Dev Studio 1")
+        dev2 = DevORM(name="Dev Studio 2")
+        dev3 = DevORM(name="Dev Studio 3")
         db.add_all([dev1, dev2, dev3])
         db.commit()
 
@@ -79,5 +80,9 @@ def init_db():
             Videogame(title="RPG Legends", description="RPG clásico con héroes y mazmorras", genre_id=rpg.id, developer_id=3)
         ])
         db.commit()
+
+        db.add_all([
+            UserORM(nick="admin", email="admin@hotmail.es", nif="1231231231", password="admin1234")
+        ])
     finally:
         db.close()

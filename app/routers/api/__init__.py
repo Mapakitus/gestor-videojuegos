@@ -8,6 +8,7 @@ from app.routers.api import genres
 from app.routers.api import videogames
 from app.routers.api import users
 from app.routers.api import developers
+from app.routers.api import reviews
 
 
 # main router
@@ -18,3 +19,4 @@ router.include_router(genres.router)
 router.include_router(videogames.router)
 router.include_router(users.router)
 router.include_router(developers.router)
+router.include_router(reviews.router)

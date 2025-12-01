@@ -13,8 +13,8 @@ class VideogameResponse(BaseModel):
     title: str
     description: str | None
     cover_url: str | None
-    genre_id: int
-    developer_id: int
+    genre_id: int | None
+    developer_id: int | None
    
 # Modelo para crear videojuegos (POST)
 class VideogameCreate(BaseModel):

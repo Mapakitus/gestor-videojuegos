@@ -1,8 +1,3 @@
-
-
-
-
-
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -61,7 +56,7 @@ def update_full(id: int, user_dto: UserUpdate, db: Session = Depends(get_db)):
     return user
 
 @router.patch("/{id}", response_model=UserResponse)
-def update_parcial(id: int, user_dto: UserPatch, db: Session = Depends(get_db)):
+def update_partial(id: int, user_dto: UserPatch, db: Session = Depends(get_db)):
     user = db.execute(select(UserORM).where(UserORM.id == id)).scalar_one_or_none()
 
     if not user:

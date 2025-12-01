@@ -1,7 +1,7 @@
+
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import Integer, String
 from app.database import Base
-from app.models.videogame import VideogameORM
 
 class GenreORM(Base):
     __tablename__ = "genres"
@@ -10,4 +10,5 @@ class GenreORM(Base):
     name: Mapped[str] = mapped_column(String, nullable=False)
     description: Mapped[str] = mapped_column(String, nullable=False)
 
-    videogames: Mapped[list["VideogameORM"]] = relationship(back_populates="genre")
+    # Unidireccional: no back_populates
+    videogames: Mapped[list["VideogameORM"]] = relationship("VideogameORM")

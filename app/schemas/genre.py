@@ -27,7 +27,7 @@ class GenreCreate(BaseModel):
     def validate_title_not_empty(cls, v: str) -> str:
         # check if the value is empty or contains only spaces
         if not v or not v.strip():
-            raise ValueError("El título no puede estar vacío")
+            raise ValueError("Este campo no puede estar vacío")
         
         # returns the value without leading and trailing spaces
         return v.strip()
@@ -43,7 +43,7 @@ class GenreUpdate(BaseModel):
     def validate_title_not_empty(cls, v: str) -> str:
         # check if the value is empty or contains only spaces
         if not v or not v.strip():
-            raise ValueError("El título no puede estar vacío")
+            raise ValueError("Este campo no puede estar vacío")
         
         # returns the value without leading and trailing spaces
         return v.strip()

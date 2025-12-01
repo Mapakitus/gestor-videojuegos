@@ -8,9 +8,7 @@ class UserResponse(BaseModel):
     nick: str
     email: EmailStr
     nif: str | None
-    password: str
-
-
+    #Quito password de la respuesta para no devolverlo en GET
 class UserCreate(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 

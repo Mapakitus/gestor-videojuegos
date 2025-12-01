@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import Integer, String
 from app.database import Base
-from app.models.review import ReviewORM
+
 
 class UserORM(Base):
     __tablename__ = "users"
@@ -12,4 +12,5 @@ class UserORM(Base):
     nif: Mapped[str | None] = mapped_column(String)
     password: Mapped[str] = mapped_column(String)
 
-    reviews: Mapped[list["ReviewORM"]] = relationship(back_populates="user")
+    # Unidireccional
+    reviews: Mapped[list["ReviewORM"]] = relationship("ReviewORM")

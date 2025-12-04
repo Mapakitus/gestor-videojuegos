@@ -1,6 +1,4 @@
-from fastapi import HTTPException
 from pydantic import BaseModel, ConfigDict, field_validator
-
 
 # PYDANTIC MODELS (schemas)
 # models that validate the data entering and leaving the API
@@ -14,6 +12,7 @@ class GenreResponse(BaseModel):
     id: int
     name: str
     description: str
+    image_url: str
 
 # schema for CREATING a genre (POST)
 class GenreCreate(BaseModel):
@@ -21,8 +20,9 @@ class GenreCreate(BaseModel):
 
     name: str
     description: str
+    image_url: str
 
-    @field_validator("name", "description")
+    @field_validator("name", "description", "image_url")
     @classmethod
     def validate_title_not_empty(cls, v: str) -> str:
         # check if the value is empty or contains only spaces
@@ -37,8 +37,9 @@ class GenreUpdate(BaseModel):
 
     name: str
     description: str
+    image_url: str
 
-    @field_validator("name", "description")
+    @field_validator("name", "description", "image_url")
     @classmethod
     def validate_title_not_empty(cls, v: str) -> str:
         # check if the value is empty or contains only spaces
@@ -53,8 +54,9 @@ class GenrePatch(BaseModel):
 
     name: str | None = None
     description: str | None = None
+    image_url: str | None = None
 
-    @field_validator("name", "description")
+    @field_validator("name", "description", "image_url")
     @classmethod
     def validate_not_empty(cls, v: str | None) -> str | None:
         # if no value is provided (None), we skip validation

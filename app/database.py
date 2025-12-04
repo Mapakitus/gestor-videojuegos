@@ -63,10 +63,19 @@ def init_db():
         # -------------------------
         # Crear géneros de ejemplo
         # -------------------------
-        action = GenreORM(name="Acción", description="Juegos de acción")
-        adventure = GenreORM(name="Aventuras", description="Juegos de aventuras")
-        rpg = GenreORM(name="Rol", description="Juegos de rol")
-        db.add_all([action, adventure, rpg])
+        action = GenreORM(name="Acción", description="Se centran en la destreza física y la reacción rápida del jugador, como juegos de lucha o plataformas.", image_url="/static/genre/action.png")
+        adventure = GenreORM(name="Aventura", description="Se enfocan en la exploración, la resolución de acertijos y una narrativa", image_url="/static/genre/adventure.png")
+        rpg = GenreORM(name="RPG", description="El jugador controla un personaje que evoluciona y mejora a lo largo de la historia, ya sea por niveles o habilidades.", image_url="/static/genre/rpg.png")
+        strategy = GenreORM(name="Estrategia", description="Requieren planificación y pensamiento táctico para superar a los oponentes, ya sea en tiempo real (RTS) o por turnos.", image_url="/static/genre/strategy.png")
+        simulation = GenreORM(name="Simulación", description="Buscan recrear una actividad del mundo real, desde pilotar aviones hasta gestionar una ciudad o una vida.", image_url="/static/genre/simulation.png")
+        sport = GenreORM(name="Deportes", description="Simulan deportes reales como fútbol o tenis.", image_url="/static/genre/sport.png")
+        arcade = GenreORM(name="Arcade", description="Juegos de acción y habilidad de ritmo rápido, a menudo con objetivos simples como superar niveles.", image_url="/static/genre/arcade.png")
+        sandbox = GenreORM(name="Sandbox", description="Ofrecen un mundo abierto donde el jugador tiene gran libertad para explorar y crear.", image_url="/static/genre/sandbox.png")
+        music = GenreORM(name="Música", description="Involucran la interacción del jugador con la música, siguiendo el ritmo de las canciones.", image_url="/static/genre/music.png")
+        puzzle = GenreORM(name="Puzle", description="Se centran en la resolución de acertijos lógicos y rompecabezas. ", image_url="/static/genre/puzzle.png")
+        shooters = GenreORM(name="Shooters", description="Incluyen los First-Person Shooter (FPS) y Third-Person Shooter (TPS), donde se usan armas de fuego.", image_url="/static/genre/shooter.png")
+        indie = GenreORM(name="Indie", description="Los videojuegos 'indie' son aquellos creados por individuos o pequeños equipos de desarrollo, sin el apoyo financiero ni la supervisión de un gran distribuidor o editor (publisher) de videojuegos comercial establecido.", image_url="/static/genre/indie.png")
+        db.add_all([action, adventure, rpg, strategy, simulation, sport, arcade, sandbox, music, puzzle, shooters, indie])
         db.commit()
 
         # -------------------------

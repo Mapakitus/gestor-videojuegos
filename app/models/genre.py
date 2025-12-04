@@ -9,6 +9,8 @@ class GenreORM(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(String, nullable=False)
     description: Mapped[str] = mapped_column(String, nullable=False)
+    image_url: Mapped[str] = mapped_column(String, nullable=True)
+
 
     # Unidireccional: no back_populates
     videogames: Mapped[list["VideogameORM"]] = relationship("VideogameORM")

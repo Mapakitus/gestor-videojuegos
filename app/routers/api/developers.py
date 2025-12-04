@@ -8,7 +8,7 @@ from app.models.developer import DevORM
 from app.schemas.developer import DevCreate, DevPatch, DevResponse, DevUpdate
 
 
-router = APIRouter(prefix="/developer", tags=["dev"])
+router = APIRouter(prefix="/api/developer", tags=["dev"])
 
 
 @router.get("", response_model=list[DevResponse])

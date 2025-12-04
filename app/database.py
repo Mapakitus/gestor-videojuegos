@@ -91,7 +91,23 @@ def init_db():
         # Crear usuarios de ejemplo
         # -------------------------
         user1 = UserORM(nick="admin", email="admin@hotmail.es", nif="1231231231", password="admin1234")
-        db.add(user1)
+        user2 = UserORM(nick="player1", email="player1@gmail.com", nif="111111111A", password="player1234")
+        user3 = UserORM(nick="player2", email="player2@gmail.com", nif="222222222B", password="player2345")
+        db.add_all([user1, user2, user3])
+        db.commit()
+        
+        # -------------------------
+        # Asignar videojuegos a los usuarios (bibliotecas)
+        # -------------------------
+        user1.videogames.append(vg1)
+        user1.videogames.append(vg2)
+
+        user2.videogames.append(vg2)
+        user2.videogames.append(vg3)
+
+        user3.videogames.append(vg1)
+        user3.videogames.append(vg3)
+
         db.commit()
 
         # -------------------------
@@ -99,7 +115,12 @@ def init_db():
         # -------------------------
         review1 = ReviewORM(rating=8.6, comment="Muy divertido", user_id=user1.id, videogame_id=vg1.id)
         review2 = ReviewORM(rating=9.0, comment="Me encantó", user_id=user1.id, videogame_id=vg2.id)
-        db.add_all([review1, review2])
+        review3 = ReviewORM(rating=7.5, comment="Buen juego", user_id=user2.id, videogame_id=vg2.id)
+        review4 = ReviewORM(rating=9.2, comment="Excelente RPG", user_id=user2.id, videogame_id=vg3.id)
+        review5 = ReviewORM(rating=8.0, comment="Entretenido", user_id=user3.id, videogame_id=vg1.id)
+        review6 = ReviewORM(rating=9.5, comment="Me fascinó", user_id=user3.id, videogame_id=vg3.id)
+
+        db.add_all([review1, review2, review3, review4, review5, review6])
         db.commit()
 
     finally:

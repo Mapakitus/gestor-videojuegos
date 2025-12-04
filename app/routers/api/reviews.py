@@ -37,6 +37,10 @@ def update_full(id: int, review_dto: ReviewUpdate, db: Session = Depends(get_db)
     if not review:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"No existe review con id {id}")
 
+    # Verificar que el usuario propietario es quien actualiza
+    if review.user_id != review_dto.user_id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="No tienes permisos para modificar esta review")
+
     update_data = review_dto.model_dump()
     for field, value in update_data.items():
         setattr(review, field, value)
@@ -51,6 +55,10 @@ def update_partial(id: int, review_dto: ReviewPatch, db: Session = Depends(get_d
     if not review:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"No existe review con id {id}")
 
+    # Verificar propiedad si se pasa user_id en el patch
+    if review_dto.user_id is not None and review.user_id != review_dto.user_id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="No tienes permisos para modificar esta review")
+
     update_data = review_dto.model_dump(exclude_unset=True)
     for field, value in update_data.items():
         setattr(review, field, value)
@@ -60,10 +68,13 @@ def update_partial(id: int, review_dto: ReviewPatch, db: Session = Depends(get_d
     return review
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete(id: int, db: Session = Depends(get_db)):
+def delete(id: int, user_id: int, db: Session = Depends(get_db)):
     review = db.execute(select(ReviewORM).where(ReviewORM.id == id)).scalar_one_or_none()
     if not review:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"No existe review con id {id}")
+
+    if review.user_id != user_id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="No tienes permisos para eliminar esta review")
 
     db.delete(review)
     db.commit()

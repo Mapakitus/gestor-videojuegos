@@ -1,6 +1,9 @@
 from pydantic import BaseModel, ConfigDict, EmailStr
 from pydantic import field_validator
 
+from app.schemas.review import ReviewResponse
+from app.schemas.videogame import VideogameResponse
+
 class UserResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
@@ -8,6 +11,8 @@ class UserResponse(BaseModel):
     nick: str
     email: EmailStr
     nif: str | None
+    videogames: list[VideogameResponse] = []
+    
     #Quito password de la respuesta para no devolverlo en GET
 class UserCreate(BaseModel):
     model_config = ConfigDict(from_attributes=True)

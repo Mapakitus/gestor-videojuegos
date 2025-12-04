@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import Integer, String, ForeignKey
 from app.database import Base
+from app.models.user_game import user_game_table
 
 class VideogameORM(Base):
     __tablename__ = "videogames"
@@ -19,5 +20,9 @@ class VideogameORM(Base):
 
     # Reviews → usamos string para evitar import directo
     reviews: Mapped[list["ReviewORM"]] = relationship("ReviewORM")
-    #Temporalmente comentado hasta que se creen las tablas
-    #usergames = relationship("UserGame", back_populates="videogame")
+    
+    users = relationship(
+        "UserORM",
+        secondary=user_game_table,
+        back_populates="videogames"
+    )

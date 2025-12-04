@@ -4,6 +4,8 @@ Esquemas Pydantic para estructura y validación de datos de videojuegos
 
 from pydantic import BaseModel, ConfigDict, field_validator
 
+from app.schemas.review import ReviewResponse
+
 
 
 # Modelo de respuesta (GET)
@@ -15,6 +17,7 @@ class VideogameResponse(BaseModel):
     cover_url: str | None
     genre_id: int | None
     developer_id: int | None
+    reviews: list[ReviewResponse] = []
    
 # Modelo para crear videojuegos (POST)
 class VideogameCreate(BaseModel):

@@ -1,23 +1,51 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
+
 from app.database import get_db
 from app.models.videogame import VideogameORM
 from app.schemas.videogame import VideogameResponse, VideogameCreate, VideogameUpdate, VideogamePatch
 
 router = APIRouter(prefix="/api/videogames", tags=["videogames"])
 
+
+# ===========================
+# GET ALL
+# ===========================
 @router.get("", response_model=list[VideogameResponse])
 def find_all(db: Session = Depends(get_db)):
-    return db.execute(select(VideogameORM)).scalars().all()
+    stmt = (
+        select(VideogameORM)
+        .options(selectinload(VideogameORM.reviews))   # 👈 Cargar reviews
+    )
+    return db.execute(stmt).scalars().all()
 
+
+# ===========================
+# GET BY ID
+# ===========================
 @router.get("/{id}", response_model=VideogameResponse)
 def find_by_id(id: int, db: Session = Depends(get_db)):
-    videogame = db.execute(select(VideogameORM).where(VideogameORM.id == id)).scalar_one_or_none()
+    stmt = (
+        select(VideogameORM)
+        .where(VideogameORM.id == id)
+        .options(selectinload(VideogameORM.reviews))   # 👈 Cargar reviews
+    )
+
+    videogame = db.execute(stmt).scalar_one_or_none()
+
     if not videogame:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"No existe ningún videojuego con el id {id}")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"No existe ningún videojuego con el id {id}"
+        )
+
     return videogame
 
+
+# ===========================
+# CREATE
+# ===========================
 @router.post("", status_code=status.HTTP_201_CREATED, response_model=VideogameResponse)
 def create(videogame_dto: VideogameCreate, db: Session = Depends(get_db)):
     new_videogame = VideogameORM(
@@ -32,11 +60,21 @@ def create(videogame_dto: VideogameCreate, db: Session = Depends(get_db)):
     db.refresh(new_videogame)
     return new_videogame
 
+
+# ===========================
+# PUT FULL
+# ===========================
 @router.put("/{id}", response_model=VideogameResponse)
 def update_full(id: int, videogame_dto: VideogameUpdate, db: Session = Depends(get_db)):
-    videogame = db.execute(select(VideogameORM).where(VideogameORM.id == id)).scalar_one_or_none()
+    videogame = db.execute(
+        select(VideogameORM).where(VideogameORM.id == id)
+    ).scalar_one_or_none()
+
     if not videogame:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"No existe el videojuego con el id {id}")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"No existe el videojuego con el id {id}"
+        )
 
     update_data = videogame_dto.model_dump()
     for field, value in update_data.items():
@@ -46,11 +84,21 @@ def update_full(id: int, videogame_dto: VideogameUpdate, db: Session = Depends(g
     db.refresh(videogame)
     return videogame
 
+
+# ===========================
+# PATCH PARTIAL
+# ===========================
 @router.patch("/{id}", response_model=VideogameResponse)
 def update_partial(id: int, videogame_dto: VideogamePatch, db: Session = Depends(get_db)):
-    videogame = db.execute(select(VideogameORM).where(VideogameORM.id == id)).scalar_one_or_none()
+    videogame = db.execute(
+        select(VideogameORM).where(VideogameORM.id == id)
+    ).scalar_one_or_none()
+
     if not videogame:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"No existe el videojuego con el id {id}")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"No existe el videojuego con el id {id}"
+        )
 
     update_data = videogame_dto.model_dump(exclude_unset=True)
     for field, value in update_data.items():
@@ -60,11 +108,21 @@ def update_partial(id: int, videogame_dto: VideogamePatch, db: Session = Depends
     db.refresh(videogame)
     return videogame
 
+
+# ===========================
+# DELETE
+# ===========================
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete(id: int, db: Session = Depends(get_db)):
-    videogame = db.execute(select(VideogameORM).where(VideogameORM.id == id)).scalar_one_or_none()
+    videogame = db.execute(
+        select(VideogameORM).where(VideogameORM.id == id)
+    ).scalar_one_or_none()
+
     if not videogame:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"No existe el videojuego con el id {id}")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"No existe el videojuego con el id {id}"
+        )
 
     db.delete(videogame)
     db.commit()

@@ -1,179 +1,38 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <title>Game Library - Home</title>
-    <link rel="stylesheet" href="/static/css/estilos.css">
+{% extends "base.html" %}
 
-    <!-- Bootstrap 5 -->
-    <link 
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" 
-        rel="stylesheet"
-    >
+{% block title %}Inicio - GameLibrary{% endblock %}
 
-    <style>
-        body {
-            background-color: #0f0f0f;
-            color: white;
-        }
-        .hero {
-            height: 260px;
-            border-radius: 20px;
-            background-size: cover;
-            background-position: center;
-            background-image: url('https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2868840/header.jpg?t=1761875177');
-        }
-        .game-card {
-            min-width: 180px;
-            border-radius: 12px;
-            overflow: hidden;
-            background: #1a1a1a;
-            transition: transform .2s;
-        }
-        .game-card:hover {
-            transform: scale(1.05);
-        }
-        .game-img {
-            height: 250px;
-            object-fit: cover;
-            width: 100%;
-        }
-        .carousel-row {
-            overflow-x: auto;
-            display: flex;
-            gap: 15px;
-            padding-bottom: 10px;
-        }
-        .carousel-row::-webkit-scrollbar {
-            height: 8px;
-        }
-        .carousel-row::-webkit-scrollbar-thumb {
-            background: #444;
-            border-radius: 10px;
-        }
-        .section-title {
-            margin-top: 40px;
-            margin-bottom: 15px;
-            font-size: 1.6rem;
-            font-weight: bold;
-        }
-    </style>
-</head>
-
-<body>
-
-    <!-- NAVBAR -->
-    <div class="container pb-4">
-        <nav class="navbar navbar-dark bg-dark fixed-top">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">GameLibrary</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel" data-bs-theme="dark">
-                    <div class="offcanvas-header">
-                        <h5 class="navbar-brand" id="offcanvasNavbarLabel">GameLibrary</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                    </div>
-                    <div class="offcanvas-body navbar-brand bg-dark">
-                        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                            <li class="nav-item">
-                                <a class="nav-link active navbar-brand" aria-current="page" href="/"><i class="fa-solid fa-house me-2"></i>Inicio</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link  navbar-brand" href="#"><i class="fa-solid fa-user me-2"></i>Usuario</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link  navbar-brand" href="#"><i class="fa-solid fa-gamepad me-2"></i>Videojuegos</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link  navbar-brand" href="/genres"><i class="fa-solid fa-genderless me-2"></i>Géneros</a>
-                            </li>
-                            
-                        </ul>
-                        <form class="d-flex mt-3" role="search">
-                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                            <button class="btn btn-outline-success" type="submit">Search</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </nav>
-    </div>    
-
-
-    
-
-    <div class="container mt-5">
-
-        <!-- HERO -->
-        <div class="hero d-sm-flex align-items-end p-4 shadow-lg">
-            <div>
-                <h1 class="fw-bold">Descubre nuevos videojuegos</h1>
-                <p class="fs-5">Explora la colección completa de títulos disponibles.</p>
-                <button class="btn btn-success btn-lg">Explorar catálogo</button>
-            </div>
-        </div>
-
-        <!-- ÚLTIMOS AÑADIDOS -->
-        <h2 class="section-title">Últimos añadidos</h2>
-        <div class="carousel-row ">
-            <div class="game-card">
-                <img class="game-img" src="https://wallpapercave.com/wp/wp11525122.jpg">
-                <div class="p-2">Título del juego</div>
-            </div>
-            <div class="game-card">
-                <img class="game-img" src="https://wallpapercave.com/wp/wp2277084.jpg">
-                <div class="p-2">Título del juego</div>
-            </div>
-            <div class="game-card">
-                <img class="game-img" src="https://wallpapercave.com/wp/wp4476327.jpg">
-                <div class="p-2">Título del juego</div>
-            </div>
-            <div class="game-card">
-                <img class="game-img" src="https://wallpapercave.com/wp/wp4768284.jpg">
-                <div class="p-2">Título del juego</div>
-            </div>
-        </div>
-
-        <!-- POPULARES -->
-        <h2 class="section-title">Más populares</h2>
-        <div class="carousel-row">
-            <div class="game-card">
-                <img class="game-img" src="https://wallpapercave.com/wp/wp12004049.jpg">
-                <div class="p-2">Juego popular</div>
-            </div>
-            <div class="game-card">
-                <img class="game-img" src="https://wallpapercave.com/wp/wp4084843.jpg">
-                <div class="p-2">Juego popular</div>
-            </div>
-            <div class="game-card">
-                <img class="game-img" src="https://wallpapercave.com/wp/wp6938960.jpg">
-                <div class="p-2">Juego popular</div>
-            </div>
-        </div>
-
-        <!-- ACCIÓN -->
-        <h2 class="section-title">Acción</h2>
-        <div class="carousel-row">
-            <div class="game-card">
-                <img class="game-img" src="https://wallpapercave.com/wp/wp5217576.jpg">
-                <div class="p-2">Juego de acción</div>
-            </div>
-            <div class="game-card">
-                <img class="game-img" src="https://wallpapercave.com/wp/wp10310965.png">
-                <div class="p-2">Juego de acción</div>
-            </div>
-        </div>
-
+{% block content %}
+<!-- HERO -->
+<div class="hero d-sm-flex align-items-end p-4 shadow-lg" 
+     style="background-image: url('https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2868840/header.jpg?t=1761875177');">
+    <div>
+        <h1 class="fw-bold">Descubre nuevos videojuegos</h1>
+        <p class="fs-5">Explora la colección completa de títulos disponibles.</p>
+        <a href="/videogames" class="btn btn-success btn-lg">Explorar catálogo</a>
     </div>
+</div>
 
-    <!-- Bootstrap JS -->
-    <script 
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
-    </script>
+<!-- Últimos añadidos -->
+<h2 class="section-title">Últimos añadidos</h2>
+<div class="carousel-row">
+    {% for game in latest_games %}
+    <div class="game-card">
+        <img class="game-img" src="{{ game.cover_url }}">
+        <div class="p-2">{{ game.title }}</div>
+    </div>
+    {% endfor %}
+</div>
 
-</body>
-</html>
+<!-- Más populares -->
+<h2 class="section-title">Más populares</h2>
+<div class="carousel-row">
+    {% for game in popular_games %}
+    <div class="game-card">
+        <img class="game-img" src="{{ game.cover_url }}">
+        <div class="p-2">{{ game.title }}</div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

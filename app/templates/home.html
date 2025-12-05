@@ -3,13 +3,14 @@
 {% block title %}Inicio - GameLibrary{% endblock %}
 
 {% block content %}
+
 <!-- HERO -->
-<div class="hero d-sm-flex align-items-end p-4 shadow-lg" 
-     style="background-image: url('https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2868840/header.jpg?t=1761875177');">
+<div class="hero d-sm-flex align-items-end p-4 shadow-lg mt-3"
+     style="background-image: url('https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2868840/header.jpg?t=1761875177'); height: 260px; border-radius: 20px; background-size: cover; background-position: center;">
     <div>
         <h1 class="fw-bold">Descubre nuevos videojuegos</h1>
         <p class="fs-5">Explora la colección completa de títulos disponibles.</p>
-        <a href="/videogames" class="btn btn-success btn-lg">Explorar catálogo</a>
+        <button class="btn btn-success btn-lg">Explorar catálogo</button>
     </div>
 </div>
 
@@ -28,6 +29,17 @@
 <h2 class="section-title">Más populares</h2>
 <div class="carousel-row">
     {% for game in popular_games %}
+    <div class="game-card">
+        <img class="game-img" src="{{ game.cover_url }}">
+        <div class="p-2">{{ game.title }}</div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Acción -->
+<h2 class="section-title">Acción</h2>
+<div class="carousel-row">
+    {% for game in action_games %}
     <div class="game-card">
         <img class="game-img" src="{{ game.cover_url }}">
         <div class="p-2">{{ game.title }}</div>

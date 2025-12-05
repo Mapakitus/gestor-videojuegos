@@ -14,7 +14,7 @@ app = FastAPI(title="Videojuegos API", version="1.0.0")
 # Montar la carpeta static
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
-#inicializa la base de datos con canciones por defecto
+#inicializa la base de datos con videojuegos por defecto
 init_db()
 
 #incluir routers de la API

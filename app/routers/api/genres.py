@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from app.models.genre import GenreORM
 
 # create router for endpoints
-router = APIRouter(prefix="/api/generos", tags=["generos"])
+router = APIRouter(prefix="/api/genres", tags=["genres"])
 
 # GET - retrieve ALL genres
 @router.get("", response_model=list[GenreResponse])

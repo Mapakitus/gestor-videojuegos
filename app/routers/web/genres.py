@@ -41,6 +41,7 @@ def create_genre(
     request: Request,
     name: str = Form(...),
     description: str = Form(...),
+    image_url: str = Form(None),
     db: Session = Depends(get_db)
 ):
     errors = []
@@ -55,6 +56,11 @@ def create_genre(
     if not description or not description.strip():
         errors.append("La descripcion no puede estar vacía")
 
+    image_url_value = None
+    if image_url and image_url.strip():
+        image_url_value = image_url.strip()
+
+
     if errors:
         return templates.TemplateResponse(
             "genre/form.html",
@@ -65,7 +71,8 @@ def create_genre(
 
         new_genre = GenreORM(
             name = name.strip(),
-            description = description.strip()
+            description = description.strip(),
+            image_url=image_url_value
         )
 
         db.add(new_genre)
@@ -90,9 +97,6 @@ def genre_detail(request: Request ,genre_id: int, db: Session = Depends(get_db))
 
     if genre is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"No existe ningún género con el id {genre_id}")
-    
-    if not videogame:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"No existen videojuegos con este género")
     
     return templates.TemplateResponse(
         "genre/detail.html",
@@ -121,6 +125,7 @@ def update_genre(
     genre_id: int,
     name: str = Form(...),
     description: str = Form(...),
+    image_url: str = Form(None),
     db: Session = Depends(get_db)
     ):
 
@@ -142,6 +147,10 @@ def update_genre(
     if not description or not description.strip():
         errors.append("La descripción no puede estar vacía")
 
+    image_url_value = None
+    if image_url and image_url.strip():
+        image_url_value = image_url.strip()
+
     if errors:
         return templates.TemplateResponse(
             "genre/form.html",
@@ -152,6 +161,7 @@ def update_genre(
         
         genre.name = name.strip()
         genre.description = description.strip()
+        image_url = image_url_value
 
         db.commit()
         db.refresh(genre)

@@ -48,27 +48,52 @@
             </div>
         </nav>
     </div>
-    <!-- Contenedor con descipcion del genero -->
-     <!-- Contenedor con descripción del género -->
-    <!-- Contenedor con descripción del género -->
-    <div class="container description bg-dark mt-5 py-4 d-flex flex-column align-items-center">
 
-        <!-- Div del título -->
-        <div class="title-section mb-5 text-center">
-            <h2 class="genre_name">{{ genre.name }}</h2>
-        </div>
-        
-        <!-- Div de la descripción -->
-        <div class="description-section text-center">
-            <h2 class="genre_name">{{ genre.description }}</h2>
-        </div>
-
-    </div>
-
+    <!-- Contenedor con descripcion del genero -->
+    <div class="container mb-3">
     
 
+        <div class="description bg-dark mt-5 mb-5 py-4 d-flex flex-column align-items-center">
 
+            <!-- Div del título -->
+            <div class="title-section mb-5 text-center">
+                <h2 class="genre_name">{{ genre.name }}</h2>
+            </div>
+            
+            <!-- Div de la descripción -->
+            <div class="description-section text-center">
+                <h2 class="genre_name">{{ genre.description }}</h2>
+            </div>
+        </div>   
+        
+        <!-- Tarjeta videojuego -->
+        <div class="mt-5">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-0 justify-content-center">
+                {% for game in videogame %}
+                <a href="/videogame/{{ game.id }}">
 
+                    <div class="ms-2 rounded-4 text-white bg-dark mb-2 position-relative text-center game" style="height: 27rem;width: 19rem; overflow:hidden;">
+                        
+                        <!-- Imagen -->
+                        <img class="img-fluid rounded-4" style="width:100%; height:100%; object-fit:cover;" src="{{ game.cover_url }}">
+                        
+                        <!-- Título encima -->
+                        <h1 class="position-absolute start-50 translate-middle-x text-white text-nowrap" 
+                        style="bottom: 10px; left: 10px; z-index: 10; text-shadow: 2px 2px 5px black;">
+                        {{ game.title }}
+                        </h1>
+                    
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+
+    
+    
+    
+    
+    </div>
             
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>

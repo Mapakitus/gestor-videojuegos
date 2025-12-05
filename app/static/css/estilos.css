@@ -50,3 +50,24 @@
 .genre_description h1 {
     color: white;
 }
+
+/* .game-card {
+    height: 200px;
+    width: 300px;
+    background-color: #212529;
+    border-radius: 30px;
+}
+
+.game-img {
+    height: 250px;
+    object-fit: cover;
+    width: 100%;
+} */
+
+.game img {
+    transition: transform 0.3s ease;
+}
+
+.game:hover img {
+    transform: scale(1.05);
+}

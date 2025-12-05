@@ -139,7 +139,8 @@ def update_genre(
 
     form_data = {
         "name": name,
-        "description": description
+        "description": description,
+        "image_url": image_url
     }
 
     if not name or not name.strip():
@@ -161,12 +162,12 @@ def update_genre(
         
         genre.name = name.strip()
         genre.description = description.strip()
-        image_url = image_url_value
+        genre.image_url = image_url_value
 
         db.commit()
         db.refresh(genre)
 
-        return RedirectResponse(url=f"genres/{genre.id}", status_code=303)
+        return RedirectResponse(url=f"/genres/{genre.id}", status_code=303)
     
     except Exception as e:
         db.rollback()

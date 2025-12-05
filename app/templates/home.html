@@ -4,47 +4,69 @@
 
 {% block content %}
 
-<!-- HERO -->
-<div class="hero d-sm-flex align-items-end p-4 shadow-lg mt-3"
-     style="background-image: url('https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2868840/header.jpg?t=1761875177'); height: 260px; border-radius: 20px; background-size: cover; background-position: center;">
-    <div>
-        <h1 class="fw-bold">Descubre nuevos videojuegos</h1>
-        <p class="fs-5">Explora la colección completa de títulos disponibles.</p>
-        <button class="btn btn-success btn-lg">Explorar catálogo</button>
+<div class="mt-5">
+        <!-- HERO -->
+    <div class="hero d-sm-flex align-items-end p-4 shadow-lg">
+        <div>
+            <h1 class="fw-bold">Descubre nuevos videojuegos</h1>
+            <p class="fs-5">Explora la colección completa de títulos disponibles.</p>
+            <button class="btn btn-success btn-lg">Explorar catálogo</button>
+        </div>
     </div>
-</div>
 
-<!-- Últimos añadidos -->
-<h2 class="section-title">Últimos añadidos</h2>
-<div class="carousel-row">
-    {% for game in latest_games %}
-    <div class="game-card">
-        <img class="game-img" src="{{ game.cover_url }}">
-        <div class="p-2">{{ game.title }}</div>
+    <!-- ÚLTIMOS AÑADIDOS -->
+    <h2 class="section-title">Últimos añadidos</h2>
+    <div class="carousel-row ">
+        <div class="game-card">
+            <img class="game-img" src="https://wallpapercave.com/wp/wp11525122.jpg">
+            <div class="p-2">Título del juego</div>
+        </div>
+        <div class="game-card">
+            <img class="game-img" src="https://wallpapercave.com/wp/wp2277084.jpg">
+            <div class="p-2">Título del juego</div>
+        </div>
+        <div class="game-card">
+            <img class="game-img" src="https://wallpapercave.com/wp/wp4476327.jpg">
+            <div class="p-2">Título del juego</div>
+        </div>
+        <div class="game-card">
+            <img class="game-img" src="https://wallpapercave.com/wp/wp4768284.jpg">
+            <div class="p-2">Título del juego</div>
+        </div>
     </div>
-    {% endfor %}
-</div>
 
-<!-- Más populares -->
-<h2 class="section-title">Más populares</h2>
-<div class="carousel-row">
-    {% for game in popular_games %}
-    <div class="game-card">
-        <img class="game-img" src="{{ game.cover_url }}">
-        <div class="p-2">{{ game.title }}</div>
+    <!-- POPULARES -->
+    <h2 class="section-title">Más populares</h2>
+    <div class="carousel-row">
+        <div class="game-card">
+            <img class="game-img" src="https://wallpapercave.com/wp/wp12004049.jpg">
+            <div class="p-2">Juego popular</div>
+        </div>
+        <div class="game-card">
+            <img class="game-img" src="https://wallpapercave.com/wp/wp4084843.jpg">
+            <div class="p-2">Juego popular</div>
+        </div>
+        <div class="game-card">
+            <img class="game-img" src="https://wallpapercave.com/wp/wp6938960.jpg">
+            <div class="p-2">Juego popular</div>
+        </div>
     </div>
-    {% endfor %}
-</div>
 
-<!-- Acción -->
-<h2 class="section-title">Acción</h2>
-<div class="carousel-row">
-    {% for game in action_games %}
-    <div class="game-card">
-        <img class="game-img" src="{{ game.cover_url }}">
-        <div class="p-2">{{ game.title }}</div>
+    <!-- ACCIÓN -->
+    <h2 class="section-title">Acción</h2>
+    <div class="carousel-row">
+        <div class="game-card">
+            <img class="game-img" src="https://wallpapercave.com/wp/wp5217576.jpg">
+            <div class="p-2">Juego de acción</div>
+        </div>
+        <div class="game-card">
+            <img class="game-img" src="https://wallpapercave.com/wp/wp10310965.png">
+            <div class="p-2">Juego de acción</div>
+        </div>
     </div>
-    {% endfor %}
+
+    
+    
 </div>
 
 {% endblock %}

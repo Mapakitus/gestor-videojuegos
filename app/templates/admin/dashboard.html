@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {% if title %}{{ title }}{% else %}Admin{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5 pt-5 text-white">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="display-4 mb-4 home-font">
+                <i class="fa-solid fa-screwdriver-wrench me-2"></i> Panel de Administración
+            </h1>
+            <p class="lead">Dashboard para administrar la app.</p>
+        </div>
+    </div>
+
+    <hr class="text-white-50">
+
+    <div class="row mt-4">
+        <div class="col-md-4 mb-4">
+            <div class="card bg-dark text-white h-100">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fa-solid fa-gamepad me-2"></i> Videojuegos
+                    </h5>
+                    <p class="card-text">Gestionar la lista de videojuegos.</p>
+                    <a href="/videogame" class="btn btn-primary">Ir a Videojuegos</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card bg-dark text-white h-100">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fa-solid fa-genderless me-2"></i> Géneros
+                    </h5>
+                    <p class="card-text">Gestionar los géneros de videojuegos.</p>
+                    <a href="/genres" class="btn btn-primary">Ir a Géneros</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card bg-dark text-white h-100">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fa-solid fa-users me-2"></i> Usuarios
+                    </h5>
+                    <p class="card-text">Gestionar los usuarios registrados.</p>
+                    <a href="/users" class="btn btn-primary">Ir a Usuarios</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    </div>
+{% endblock %}

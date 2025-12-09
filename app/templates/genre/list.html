@@ -3,7 +3,7 @@
 {% block title %}Géneros - GameLibrary{% endblock %}
 
 {% block content %}
-<div class="container mt-5 ps-5 pe-5">
+<!-- <div class="container container-fluid mt-5 ps-5 pe-5">
     {% for genre in genres %}
     <a href="/genres/{{ genre.id }}" class="text-decoration-none d-block mb-4 ps-5">
         <div style="background-image: url('{{ genre.image_url }}');" class="genre">
@@ -11,5 +11,23 @@
         </div>
     </a>
     {% endfor %}
+</div> -->
+
+<div class="container mt-5">
+  <div class="row">
+    {% for genre in genres %}
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3 mb-4">
+        <a href="/genres/{{ genre.id }}" class="text-decoration-none d-block">
+          <div
+            class="genre"
+            style="background-image: url('{{ genre.image_url }}');"
+          >
+            <h1 class="genre-title">{{ genre.name }}</h1>
+          </div>
+        </a>
+      </div>
+    {% endfor %}
+  </div>
 </div>
+
 {% endblock %}

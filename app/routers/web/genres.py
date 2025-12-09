@@ -171,7 +171,7 @@ def update_genre(
     
     except Exception as e:
         db.rollback()
-        errors.append("No se ha podido editar el género con exito")
+        errors.append(f"No se ha podido editar el género con exito: {str(e)}")
         return templates.TemplateResponse(
             "genre/form.html",
             {"request": request, "genre": genre, "errors": errors, "form_data": form_data}

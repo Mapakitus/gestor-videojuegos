@@ -9,14 +9,15 @@ from app.models.videogame import VideogameORM
 
 templates = Jinja2Templates(directory="app/templates")
 
-router = APIRouter(tags=["web"])
+router = APIRouter(prefix="", tags=["web"])
 
 
 @router.get("/", response_class=HTMLResponse)
 def home(request: Request, db: Session = Depends(get_db)):
     videogame = db.execute(select(VideogameORM)).scalars().all()
+    last_videogame = db.execute(select(VideogameORM).order_by(VideogameORM.id.desc()).limit(5)).scalars().all()    
 
     return templates.TemplateResponse(
         "home.html",
-        {"request": request, "videogame": videogame}
+        {"request": request, "videogame": videogame, "last_videogame": last_videogame}
     )

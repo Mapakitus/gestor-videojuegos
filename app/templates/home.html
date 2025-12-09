@@ -6,10 +6,10 @@
 
 <div class="mt-5">
         <!-- HERO -->
-    <div class="hero d-sm-flex align-items-end p-4 shadow-lg">
+    <div class="hero d-sm-flex align-items-end p-4 shadow-lg" style="background-image: url('{{ last_videogame[0].cover_url }}');">
         <div>
-            <h1 class="fw-bold">Descubre nuevos videojuegos</h1>
-            <p class="fs-5">Explora la colección completa de títulos disponibles.</p>
+            <h1 class="fw-bold home-font">Descubre nuevos videojuegos</h1>
+            <p class="fs-5 ">Explora la colección completa de títulos disponibles.</p>
             <button class="btn btn-success btn-lg">Explorar catálogo</button>
         </div>
     </div>
@@ -17,22 +17,15 @@
     <!-- ÚLTIMOS AÑADIDOS -->
     <h2 class="section-title">Últimos añadidos</h2>
     <div class="carousel-row ">
-        <div class="game-card">
-            <img class="game-img" src="https://wallpapercave.com/wp/wp11525122.jpg">
-            <div class="p-2">Título del juego</div>
-        </div>
-        <div class="game-card">
-            <img class="game-img" src="https://wallpapercave.com/wp/wp2277084.jpg">
-            <div class="p-2">Título del juego</div>
-        </div>
-        <div class="game-card">
-            <img class="game-img" src="https://wallpapercave.com/wp/wp4476327.jpg">
-            <div class="p-2">Título del juego</div>
-        </div>
-        <div class="game-card">
-            <img class="game-img" src="https://wallpapercave.com/wp/wp4768284.jpg">
-            <div class="p-2">Título del juego</div>
-        </div>
+        {% for game in last_videogame %}
+        <a href="/videogame/{{ game.id }}" class="game">
+
+            <div class="game-card">
+                <img class="game-img" src="{{ game.cover_url }}">
+                <div class="p-2">{{ game.title }}</div>
+            </div>
+        </a>
+        {% endfor %}
     </div>
 
     <!-- POPULARES -->
@@ -55,14 +48,17 @@
     <!-- ACCIÓN -->
     <h2 class="section-title">Acción</h2>
     <div class="carousel-row">
-        <div class="game-card">
-            <img class="game-img" src="https://wallpapercave.com/wp/wp5217576.jpg">
-            <div class="p-2">Juego de acción</div>
-        </div>
-        <div class="game-card">
-            <img class="game-img" src="https://wallpapercave.com/wp/wp10310965.png">
-            <div class="p-2">Juego de acción</div>
-        </div>
+        <a href="">
+
+        </a>
+            <div class="game-card">
+                <img class="game-img" src="https://wallpapercave.com/wp/wp5217576.jpg">
+                <div class="p-2">Juego de acción</div>
+            </div>
+            <div class="game-card">
+                <img class="game-img" src="https://wallpapercave.com/wp/wp10310965.png">
+                <div class="p-2">Juego de acción</div>
+            </div>
     </div>
 
     

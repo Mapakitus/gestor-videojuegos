@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{%  block title %}{% if game %}Editar videojuego{% else %}Crear videojuego{% endif %}{% endblock %}
+
+{% block content %}
+<div class="container bg-dark form mt-5 pt-2 pb-3 rounded-4 text-white">
+
+    {% if errors %}
+    <div class="alert alert-danger" role="alert">
+        <h5 class="alert-heading"><i class="fa-solid fa-triangle-exclamation"></i> Errores de validación:</h5>
+        <ul class="mb-0">
+            {% for error in errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <form method="post" action="{% if game %}/videogame/{{ game.id }}/edit{% else %}/videogame/new{% endif %}">
+        <div class="d-flex justify-content-center">
+            <h1>{% if game %}Edita un videojuego{% else %}Crear un videojuego{% endif %}</h1>
+        </div>
+
+        <div class="mb-4">
+            <label for="title" class="form-label">Título del videojuego</label>
+            <input type="text" 
+                    class="form-control" 
+                    id="title"
+                    name="title" 
+                    value="{% if form_data %}{{ form_data.get('title', '') }}{% elif game %}{{game.title}}{% endif %}" 
+                    required
+                    maxlength="100">
+            <div class="form-text text-white">Este campo no es obligatorio. (máx. 100 carácteres)</div>
+        </div>
+
+        <div class="mb-4">
+            <label for="description" class="form-label">Descripción</label>
+            <input type="text" 
+                    class="form-control" 
+                    id="description" 
+                    name="description" 
+                    value="{{ form_data.get('description', '') if form_data else game.description if game and game.description else ''}}" 
+                    required maxlength="250">
+            <div class="form-text text-white">Este campo no es obligatorio. (máx. 250 carácteres) </div>
+        </div>
+
+        <div class="mb-4">
+            <label for="image" class="form-label">Imagen</label>
+            <input type="text" 
+                    class="form-control" 
+                    id="image" 
+                    name="cover_url" 
+                    value="{% if form_data and form_data.get('cover_rul') %}{{ form_data.get('cover_url','') }}{% elif game and game.cover_rul is not none %}{{ game.cover_url }}{% else %}{% endif %}" 
+                    maxlength="255">
+            <div class="form-text text-white">Este campo no es obligatorio. (URL o PATH)</div>
+        </div>
+
+        <div class="mb-4">
+            <label for="genre" class="form-label">Género Id</label>
+            <input type="number" 
+                    class="form-control" 
+                    id="genre" 
+                    name="genre_id" 
+                    value="{% if form_data and form_data.get('genre_id') %}{{ form_data.get('genre_id') }}{% elif game and game.genre_id is not none %}{{ game.genre_id }}{% endif %}" 
+                    min="0"
+                    step="1">
+            <div class="form-text text-white">Este campo no es obligatorio.</div>
+        </div>  
+        <div class="mb-4">
+            <label for="developer_id" class="form-label">Desarrolladora Id</label>
+            <input type="number" 
+                    class="form-control" 
+                    id="developer_id" 
+                    name="developer_id" 
+                    value="{% if form_data and form_data.get('developer_id') %}{{ form_data.get('developer_id') }}{% elif game and game.developer_id is not none %}{{ game.developer_id }}{% endif %}" 
+                    min="0"
+                    step="1">
+            <div class="form-text text-white">Este campo no es obligatorio.</div>
+        </div>   
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+{% endblock %}

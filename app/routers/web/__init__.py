@@ -8,6 +8,7 @@ from fastapi import APIRouter
 from app.routers.web import genres
 from app.routers.web import users
 from app.routers.web import home
+from app.routers.web import videogame
 
 
 # main router
@@ -17,3 +18,4 @@ router = APIRouter()
 router.include_router(genres.router)
 router.include_router(users.router)
 router.include_router(home.router)
+router.include_router(videogame.router)

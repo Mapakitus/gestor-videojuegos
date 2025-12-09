@@ -149,17 +149,6 @@ def init_db():
         db.commit()
 
 
-
-        # -------------------------
-        # Crear videojuegos de ejemplo
-        # -------------------------
-        vg1 = VideogameORM(title="Super Action Game", description="Juego de acción épico", genre_id=action.id, developer_id=dev1.id)
-        vg2 = VideogameORM(title="Adventure Quest", description="Explora mundos fantásticos", genre_id=adventure.id, developer_id=dev2.id)
-        vg3 = VideogameORM(title="RPG Legends", description="RPG clásico con héroes y mazmorras", genre_id=rpg.id, developer_id=dev3.id)
-        db.add_all([vg1, vg2, vg3])
-        db.commit()
-
-
         # -------------------------
         # Crear usuarios de ejemplo
         # -------------------------
@@ -186,12 +175,12 @@ def init_db():
         # -------------------------
         # Crear reviews de ejemplo
         # -------------------------
-        review1 = ReviewORM(rating=8.6, comment="Muy divertido", user_id=user1.id, videogame_id=vg1.id)
-        review2 = ReviewORM(rating=9.0, comment="Me encantó", user_id=user1.id, videogame_id=vg2.id)
-        review3 = ReviewORM(rating=7.5, comment="Buen juego", user_id=user2.id, videogame_id=vg2.id)
-        review4 = ReviewORM(rating=9.2, comment="Excelente RPG", user_id=user2.id, videogame_id=vg3.id)
-        review5 = ReviewORM(rating=8.0, comment="Entretenido", user_id=user3.id, videogame_id=vg1.id)
-        review6 = ReviewORM(rating=9.5, comment="Me fascinó", user_id=user3.id, videogame_id=vg3.id)
+        review1 = ReviewORM(rating=8.6, comment="Muy divertido", user_id=user1.id, videogame_id=1)
+        review2 = ReviewORM(rating=9.0, comment="Me encantó", user_id=user1.id, videogame_id=1)
+        review3 = ReviewORM(rating=7.5, comment="Buen juego", user_id=user2.id, videogame_id=1)
+        review4 = ReviewORM(rating=9.2, comment="Excelente RPG", user_id=user2.id, videogame_id=2)
+        review5 = ReviewORM(rating=8.0, comment="Entretenido", user_id=user3.id, videogame_id=3)
+        review6 = ReviewORM(rating=9.5, comment="Me fascinó", user_id=user3.id, videogame_id=2)
 
         db.add_all([review1, review2, review3, review4, review5, review6])
         db.commit()

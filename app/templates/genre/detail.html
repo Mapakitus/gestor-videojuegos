@@ -5,24 +5,31 @@
 {% block content %}
 <div class="container mb-3">
 
-    <div class="description bg-dark mt-5 mb-5 py-4 d-flex flex-column align-items-center">
-        <div class="title-section mb-5 text-center">
-            <h2 class="genre_name">{{ genre.name }}</h2>
+    <div class="bg-dark mt-5 mb-5 pb-4 rounded-4">
+        <div class="pt-3 ps-3 d-flex">
+            <a class="game-font me-2" href="/">Inicio</a><span class="me-2">></span>
+            <a class="game-font" href="/genres">Géneros</a>
         </div>
-        <div class="description-section text-center">
-            <h2 class="genre_name">{{ genre.description }}</h2>
+
+        <div class="d-flex flex-column align-items-center">
+            <div class="title-section mb-5 text-center">
+                <h1 class="genre_name">{{ genre.name }}</h1>
+            </div>
+            <div class="description-section text-center">
+                <p class="genre_name fs-5">{{ genre.description }}</p>
+            </div>
         </div>
     </div>   
 
-    <div class="mt-5">
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-0 justify-content-center">
+    <div class="container mi-div justify-content-center ">
+        <div class="row flex-wrap">
             {% for game in videogame %}
-            <a href="/videogame/{{ game.id }}">
-                <div class="ms-2 rounded-4 text-white bg-dark mb-2 position-relative text-center game" style="height: 27rem;width: 19rem; overflow:hidden;">
-                    <img class="img-fluid rounded-4" style="width:100%; height:100%; object-fit:cover;" src="{{ game.cover_url }}">
-                    <h1 class="position-absolute start-50 translate-middle-x text-white text-nowrap" style="bottom: 10px; left: 10px; z-index: 10; text-shadow: 2px 2px 5px black;">
+            <a class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3 text-decoration-none text-white mb-3" href="/videogame/{{ game.id }}">
+                <div class= "game-card">
+                    <img class="game-img img-fluid" src="{{ game.cover_url }}">
+                    <div class="text-center">
                         {{ game.title }}
-                    </h1>
+                    </div>
                 </div>
             </a>
             {% endfor %}

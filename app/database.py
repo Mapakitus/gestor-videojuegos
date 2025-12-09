@@ -80,9 +80,18 @@ def init_db():
         # -------------------------
         # Crear developers de ejemplo
         # -------------------------
-        dev1 = DevORM(name="Dev Studio 1")
-        dev2 = DevORM(name="Dev Studio 2")
-        dev3 = DevORM(name="Dev Studio 3")
+        dev1 = DevORM(
+            name="Nintendo", 
+            image_url="https://placehold.co/100x100?text=Nintendo"
+        )
+        dev2 = DevORM(
+            name="CD Projekt Red", 
+            image_url="https://placehold.co/100x100?text=CDPR"
+        )
+        dev3 = DevORM(
+            name="FromSoftware", 
+            image_url="https://placehold.co/100x100?text=FromSoft"
+        )
         db.add_all([dev1, dev2, dev3])
         db.commit()
 

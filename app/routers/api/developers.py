@@ -28,7 +28,8 @@ def find_by_id(id: int, db: Session = Depends(get_db)):
 def create(dev_dto: DevCreate, db: Session = Depends(get_db)):
     
     new_dev = DevORM(
-        name=dev_dto.name
+        name=dev_dto.name,
+        image_url=dev_dto.image_url
     )
 
     db.add(new_dev)

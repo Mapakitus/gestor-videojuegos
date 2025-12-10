@@ -11,6 +11,7 @@ from app.routers.web import home
 from app.routers.web import videogame
 from app.routers.web import developers
 from app.routers.web import admin
+from app.routers.web import user_game
 
 # main router
 router = APIRouter()
@@ -22,3 +23,4 @@ router.include_router(home.router)
 router.include_router(videogame.router)
 router.include_router(developers.router)
 router.include_router(admin.router)
+router.include_router(user_game.router)

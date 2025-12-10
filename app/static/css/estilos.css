@@ -159,18 +159,14 @@ a.game-font:hover {
     width: 100%;
 }
 
-
-
 .container-game-detail {
-    width: 1200px;
+    width: 100%;
     margin: 0 auto;
-    
 }
 
 .game-detail img {
     height: 400px;
 }
-
 
 .container-description {
     padding-top: 5rem;
@@ -183,8 +179,7 @@ a.game-font:hover {
     width: 300px;
 }
 
-.card-review img{
-
+.card-review img {
     width: 50px;
     height: 50px;
     border-radius: 100%;

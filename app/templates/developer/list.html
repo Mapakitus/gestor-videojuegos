@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Desarrolladoras{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+  <div class="row">
+    {% for dev in developers %}
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3 mb-4">
+        <a href="/developers/{{ dev.id }}" class="text-decoration-none d-block">
+          <div
+            class="genre"
+            style="background-image: url('{{ dev.image_url }}');"
+          >
+            <h1 class="genre-title"></h1>
+          </div>
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+
+{% endblock %}

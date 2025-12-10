@@ -14,21 +14,6 @@ templates = Jinja2Templates(directory="app/templates/")
 
 router = APIRouter(prefix="/videogame", tags=["web"])
 
-# show all games
-
-@router.get("", response_class=HTMLResponse)
-def list_videogames(request: Request, db: Session = Depends(get_db)):
-    videogames = db.execute(select(VideogameORM)).scalars().all()
-    last_games = db.execute(select(VideogameORM).order_by(VideogameORM.id.desc()).limit(3)).scalars().all()
-    
-    if not videogames:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="404 - Base de datos no encontrada")
-    
-
-    return templates.TemplateResponse(
-        "home.html",
-        {"request": request, "videogames": videogames, "last_games": last_games}
-    )
 
 # show form create videogame
     

@@ -5,6 +5,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.developer import DevORM
+from app.models.videogame import VideogameORM
 
 
 templates = Jinja2Templates(directory="app/templates")
@@ -85,6 +86,7 @@ def create_developer(
 def detail_developer(request: Request, developer_id: int, db: Session = Depends(get_db)):
     """Muestra el detalle de una desarrolladora específica."""
     developer = db.execute(select(DevORM).where(DevORM.id == developer_id)).scalar_one_or_none()
+    games_dev = db.execute(select(VideogameORM).where(VideogameORM.developer_id == developer_id)).scalars().all()
 
     if developer is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="404 - Desarrolladora no encontrada")
@@ -92,7 +94,7 @@ def detail_developer(request: Request, developer_id: int, db: Session = Depends(
     return templates.TemplateResponse(
         
         "developer/detail.html",
-        {"request": request, "developer": developer}
+        {"request": request, "developer": developer, "games_dev": games_dev}
     )
 
 

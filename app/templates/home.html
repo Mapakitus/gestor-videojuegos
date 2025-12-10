@@ -28,37 +28,30 @@
         {% endfor %}
     </div>
 
-    <!-- POPULARES -->
-    <h2 class="section-title">Más populares</h2>
-    <div class="carousel-row">
-        <div class="game-card">
-            <img class="game-img" src="https://wallpapercave.com/wp/wp12004049.jpg">
-            <div class="p-2">Juego popular</div>
-        </div>
-        <div class="game-card">
-            <img class="game-img" src="https://wallpapercave.com/wp/wp4084843.jpg">
-            <div class="p-2">Juego popular</div>
-        </div>
-        <div class="game-card">
-            <img class="game-img" src="https://wallpapercave.com/wp/wp6938960.jpg">
-            <div class="p-2">Juego popular</div>
-        </div>
-    </div>
-
     <!-- ACCIÓN -->
     <h2 class="section-title">Acción</h2>
     <div class="carousel-row">
-        <a href="">
-
+        {% for game in games_action %}
+        <a href="/videogame/{{ game.id }}" class="game">
+            <div class="game-card">
+                <img class="game-img" src="{{ game.cover_url }}">
+                <div class="p-2">{{ game.title }}</div>
+            </div>
         </a>
+        {% endfor %}
+    </div>
+
+    <!-- AVENTURA -->
+    <h2 class="section-title">Aventura</h2>
+    <div class="carousel-row">
+        {% for game in games_aventure %}
+        <a href="/videogame/{{ game.id }}" class="game">
             <div class="game-card">
-                <img class="game-img" src="https://wallpapercave.com/wp/wp5217576.jpg">
-                <div class="p-2">Juego de acción</div>
+                <img class="game-img" src="{{ game.cover_url }}">
+                <div class="p-2">{{ game.title }}</div>
             </div>
-            <div class="game-card">
-                <img class="game-img" src="https://wallpapercave.com/wp/wp10310965.png">
-                <div class="p-2">Juego de acción</div>
-            </div>
+        </a>
+        {% endfor %}
     </div>
 
     

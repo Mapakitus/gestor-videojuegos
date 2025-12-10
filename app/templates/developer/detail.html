@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Desarrolladoras{% endblock %}
+
+{% block content %}
+
+<div class="container mb-3">
+
+    <div class="bg-dark mt-5 mb-5 rounded-4">
+        <div class="pt-3 ps-3 d-flex pb-3">
+            <a class="game-font me-2" href="/">Inicio</a><span class="me-2">></span>
+            <a class="game-font" href="/developers">Desarrolladoras</a>
+        </div>
+
+        <div class="d-flex flex-column align-items-center">
+            <div class="title-section mb-5 text-center">
+                <h1 class="genre_name">{{ developer.name }}</h1>
+            </div>
+        </div>
+    </div>   
+
+    <div class="container mi-div justify-content-center ">
+        <div class="row flex-wrap">
+            {% for game in games_dev %}
+            <a class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3 text-decoration-none text-white mb-3" href="/videogame/{{ game.id }}">
+                <div class= "game-card">
+                    <img class="game-img img-fluid" src="{{ game.cover_url }}">
+                    <div class="text-center">
+                        {{ game.title }}
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

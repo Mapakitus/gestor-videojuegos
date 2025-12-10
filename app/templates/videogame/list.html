@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Mi Biblioteca de Videojuegos</h1>
+
+    {% if games %}
+        <table class="table table-striped mt-3 align-middle">
+            <thead>
+                <tr>
+                    <th>Portada</th>
+                    <th>Título</th>
+                    <th>Descripción</th>
+                    <th>Género</th>
+                    <th>Desarrolladora</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for game in games %}
+                <tr>
+                    <td>
+                        {% if game.cover_url %}
+                        <img src="{{ game.cover_url }}" alt="{{ game.title }}" style="width: 80px; height: auto;">
+                        {% else %}
+                        <span class="text-muted">Sin imagen</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ game.title }}</td>
+                    <td>{{ game.description or "Sin descripción" }}</td>
+                    <td>{{ game.genre.name if game.genre else "Desconocido" }}</td>
+                    <td>{{ game.developer.name if game.developer else "Desconocido" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No tienes juegos en tu biblioteca.</p>
+    {% endif %}
+</div>
+{% endblock %}

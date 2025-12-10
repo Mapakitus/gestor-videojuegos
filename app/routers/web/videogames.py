@@ -15,6 +15,30 @@ templates = Jinja2Templates(directory="app/templates/")
 router = APIRouter(prefix="/videogame", tags=["web"])
 
 
+
+# NUEVO: LISTADO DE BIBLIOTECA DEL USUARIO POR DEFECTO, ASUMIENDO EL USER_ID=2 (player1)
+
+@router.get("/library", response_class=HTMLResponse)
+def list_user_games(request: Request, db: Session = Depends(get_db)):
+    user_id = 2  # usuario fijo por ahora
+
+    user = db.get(UserORM, user_id)
+
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuario por defecto no encontrado")
+
+    # juegos de la biblioteca del usuario
+    games = user.videogames  
+
+    return templates.TemplateResponse(
+        "videogame/list.html",
+        {
+            "request": request,
+            "games": games
+        }
+    )
+
+
 # show form create videogame
     
 @router.get("/new", response_class=HTMLResponse)
@@ -118,10 +142,14 @@ def game_detail(game_id: int, request: Request, db: Session = Depends(get_db)):
     if videogame is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"404 - No existe ningún videojuego con el id {game_id}")
     
+    # Usuario por defecto 
+    USER_ID = 2
+    user = db.get(UserORM, USER_ID)
+    
     return templates.TemplateResponse(
-        "videogame/detail.html",
-        {"request": request, "videogame": videogame, "genre": genre}
-    )
+    "videogame/detail.html",
+    {"request": request, "videogame": videogame, "genre": genre, "user": user}
+)
 
 
 # edit videogame by id
@@ -223,6 +251,44 @@ def edit_videogame(
             "videogame/form.html",
             {"request": request, "game": game, "errors": errors, "form_data": form_data}
         )
+        
+# ========================
+# NUEVO: DESCARGAR / DESINSTALAR VIDEOJUEGO PARA USUARIO POR DEFECTO
+# ========================
+@router.post("/{game_id}/download", response_class=HTMLResponse)
+def toggle_download(game_id: int, request: Request, db: Session = Depends(get_db)):
+    USER_ID = 2  # usuario fijo
+    user = db.get(UserORM, USER_ID)
+    game = db.get(VideogameORM, game_id)
+
+    if not user or not game:
+        raise HTTPException(status_code=404, detail="Usuario o videojuego no encontrado")
+
+    message = ""
+    if game in user.videogames:
+        # Si ya está, lo quitamos (Desinstalar)
+        user.videogames.remove(game)
+        message = "Videojuego desinstalado correctamente"
+    else:
+        # Si no está, lo añadimos (Descargar)
+        user.videogames.append(game)
+        message = "Videojuego descargado correctamente"
+
+    db.commit()
+
+    # Volvemos al detalle del juego
+    genre = db.get(GenreORM, game.genre_id)
+    return templates.TemplateResponse(
+        "videogame/detail.html",
+        {
+            "request": request,
+            "videogame": game,
+            "genre": genre,
+            "user": user,
+            "message": message
+        }
+    )
+
 
 
 

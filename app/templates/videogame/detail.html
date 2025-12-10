@@ -51,9 +51,17 @@
             </div>
 
             <div class="d-flex flex-column justify-content-end" style="height: 50%;">
-                <form method="post" action="/videogame/{{ user.id }}/{{ videogame.id }}/download" class="text-center">
-                    <button class="btn btn-success btn-lg fw-bold">Descargar</button>
+                <form method="post" action="/videogame/{{ videogame.id }}/download" class="text-center">
+                    {% if user and videogame in user.videogames %}
+                        <button type="submit" class="btn btn-danger btn-lg fw-bold">Desinstalar</button>
+                    {% else %}
+                        <button type="submit" class="btn btn-success btn-lg fw-bold">Descargar</button>
+                    {% endif %}
                 </form>
+
+               <!-- <form method="post" action="/videogame/{{ user.id }}/{{ videogame.id }}/download" class="text-center">
+                    <button class="btn btn-success btn-lg fw-bold">Descargar</button>
+                </form>-->
             </div>
 
         </div>

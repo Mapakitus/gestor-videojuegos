@@ -6,7 +6,7 @@
 
 <div class="container container-fluid container-detail bg-dark background-detail mt-5 rounded-4 pb-5" style="width: 100%;">
 
-    <!-- navegador rapido -->
+    <!-- navegador rápido -->
     <div class="fw-bold pt-4 ps-3 pb-4">
         <a href="/" class="game-font me-2">Inicio</a><span class="me-2"> ></span>
         <a href="/genres" class="game-font me-2">Géneros</a><span class="me-2"> ></span>
@@ -99,11 +99,65 @@
                 <!-- Comentario -->
                 <div class="card flex-grow-1 p-3 bg-light text-dark rounded-4">
                     {{ review.comment }}
+
                     {% if review.user.id == user.id %}
                     <div class="mt-2 d-flex gap-2">
-                        <a href="/videogame/{{ videogame.id }}/review/{{ review.id }}/edit" class="btn btn-warning btn-sm">Editar</a>
-                        <a href="/videogame/{{ videogame.id }}/review/{{ review.id }}/delete" class="btn btn-danger btn-sm">Eliminar</a>
+                        <!-- Botón Editar modal -->
+                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editReviewModal{{ review.id }}">Editar</button>
+
+                        <!-- Botón Eliminar modal -->
+                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteReviewModal{{ review.id }}">Eliminar</button>
                     </div>
+
+                    <!-- Modal Editar -->
+                    <div class="modal fade" id="editReviewModal{{ review.id }}" tabindex="-1" aria-labelledby="editReviewLabel{{ review.id }}" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content bg-dark text-white">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="editReviewLabel{{ review.id }}">Editar reseña</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <form method="post" action="/videogame/{{ videogame.id }}/review/edit">
+                              <div class="modal-body">
+                                  <div class="mb-3">
+                                      <label class="form-label">Nota</label>
+                                      <input type="number" name="rating" class="form-control" min="0" max="10" step="0.1" value="{{ review.rating }}" required>
+                                  </div>
+                                  <div class="mb-3">
+                                      <label class="form-label">Comentario</label>
+                                      <textarea name="comment" class="form-control" required>{{ review.comment }}</textarea>
+                                  </div>
+                              </div>
+                              <div class="modal-footer">
+                                  <button type="submit" class="btn btn-success">Guardar cambios</button>
+                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                              </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Modal Eliminar -->
+                    <div class="modal fade" id="deleteReviewModal{{ review.id }}" tabindex="-1" aria-labelledby="deleteReviewLabel{{ review.id }}" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content bg-dark text-white">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="deleteReviewLabel{{ review.id }}">Eliminar reseña</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <form method="post" action="/videogame/{{ videogame.id }}/review/delete">
+                              <div class="modal-body">
+                                  ¿Seguro que quieres eliminar tu reseña?
+                              </div>
+                              <div class="modal-footer">
+                                  <button type="submit" class="btn btn-danger">Eliminar</button>
+                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                              </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+
                     {% endif %}
                 </div>
             </div>

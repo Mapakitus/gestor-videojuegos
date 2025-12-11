@@ -11,45 +11,29 @@ from app.models.videogame import VideogameORM
 from app.models.review import ReviewORM
 
 templates = Jinja2Templates(directory="app/templates/")
-
 router = APIRouter(prefix="/videogame", tags=["web"])
 
-
-
-# NUEVO: LISTADO DE BIBLIOTECA DEL USUARIO POR DEFECTO, ASUMIENDO EL USER_ID=2 (player1)
-
+# ========================
+# LISTADO DE LA BIBLIOTECA DEL USUARIO POR DEFECTO
+# ========================
 @router.get("/library", response_class=HTMLResponse)
 def list_user_games(request: Request, db: Session = Depends(get_db)):
-    user_id = 2  # usuario fijo por ahora
-
-    user = db.get(UserORM, user_id)
-
+    USER_ID = 2
+    user = db.get(UserORM, USER_ID)
     if not user:
         raise HTTPException(status_code=404, detail="Usuario por defecto no encontrado")
-
-    # juegos de la biblioteca del usuario
-    games = user.videogames  
-
+    games = user.videogames
     return templates.TemplateResponse(
         "videogame/list.html",
-        {
-            "request": request,
-            "games": games
-        }
+        {"request": request, "games": games}
     )
 
-
-# show form create videogame
-    
+# ========================
+# CREAR NUEVO VIDEOJUEGO
+# ========================
 @router.get("/new", response_class=HTMLResponse)
-def form_create(request: Request, db: Session = Depends(get_db)):
-    return templates.TemplateResponse(
-        "videogame/form.html",
-        {"request": request, "videogame": None}
-    )
-
-
-# create new videogame
+def form_create(request: Request):
+    return templates.TemplateResponse("videogame/form.html", {"request": request, "videogame": None})
 
 @router.post("/new", response_class=HTMLResponse)
 def create(
@@ -60,56 +44,24 @@ def create(
     genre_id: str = Form(None),
     developer_id: str = Form(None),
     db: Session = Depends(get_db)
-    ):
-
+):
     errors = []
-
     form_data = {
-        "title": title,
-        "description": description,
-        "cover_url": cover_url,
-        "genre_id": genre_id,
+        "title": title, "description": description,
+        "cover_url": cover_url, "genre_id": genre_id,
         "developer_id": developer_id
     }
-
     if not title or not title.strip():
         errors.append("El título del videojuego no puede estar vacío")
-
-    description_value = None
-    if description and description.strip():
-        description_value = description.strip()
-
-    cover_url_value = None
-    if cover_url and cover_url.strip():
-        cover_url_value = cover_url.strip()
-
-    genre_id_value = None
-    if genre_id and genre_id.strip():
-        try:
-            genre_id_value = int(genre_id.strip())
-            if genre_id_value < 0:
-                errors.append("El género id no puede ser negativo")
-        except ValueError:
-            errors.append("El id debe ser un número válido")
-
-    developer_id_value = None
-    if developer_id and developer_id.strip():
-        try:
-
-            developer_id_value = int(developer_id.strip())
-            if developer_id_value < 0:
-                errors.append("El desarrolladora id no puede ser negativo")
-        except ValueError:
-            errors.append("El id debe ser un número válido")
+    description_value = description.strip() if description else None
+    cover_url_value = cover_url.strip() if cover_url else None
+    genre_id_value = int(genre_id.strip()) if genre_id and genre_id.strip().isdigit() else None
+    developer_id_value = int(developer_id.strip()) if developer_id and developer_id.strip().isdigit() else None
 
     if errors:
-        return templates.TemplateResponse(
-            "videogame/form.html",
-            {"request": request, "videogame": None, "errors": errors, "form_data": form_data}
-        )
-    
-    try:
+        return templates.TemplateResponse("videogame/form.html", {"request": request, "videogame": None, "errors": errors, "form_data": form_data})
 
+    try:
         new_game = VideogameORM(
             title=title.strip(),
             description=description_value,
@@ -117,60 +69,35 @@ def create(
             genre_id=genre_id_value,
             developer_id=developer_id_value
         )
-
         db.add(new_game)
         db.commit()
         db.refresh(new_game)
-
         return RedirectResponse(url=f"/videogame/{new_game.id}", status_code=303)
     except Exception as e:
         db.rollback()
         errors.append(f"Error al crear el videojuego: {str(e)}")
-        return templates.TemplateResponse(
-            "videogame/form.html",
-            {"request": request, "videogame": None, "errors": errors, "form_data": form_data}
-        )
-    
-# show detail videogame
+        return templates.TemplateResponse("videogame/form.html", {"request": request, "videogame": None, "errors": errors, "form_data": form_data})
+
+# ========================
+# DETALLE DEL VIDEOJUEGO
+# ========================
 @router.get("/{game_id}", response_class=HTMLResponse)
 def game_detail(game_id: int, request: Request, db: Session = Depends(get_db)):
-    # Cargar videojuego + reseñas + usuario de cada reseña
-    stmt = (
-        select(VideogameORM)
-        .where(VideogameORM.id == game_id)
-        .options(
-            selectinload(VideogameORM.reviews).selectinload(ReviewORM.user)
-        )
+    stmt = select(VideogameORM).where(VideogameORM.id == game_id).options(
+        selectinload(VideogameORM.reviews).selectinload(ReviewORM.user)
     )
     videogame = db.execute(stmt).scalar_one_or_none()
+    if not videogame:
+        raise HTTPException(status_code=404, detail=f"No existe ningún videojuego con id {game_id}")
 
-    if videogame is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"404 - No existe ningún videojuego con el id {game_id}")
-
-    # cargar género (si existe)
-    genre = None
-    if videogame.genre_id is not None:
-        genre = db.get(GenreORM, videogame.genre_id)
-
-    # Usuario por defecto
+    genre = db.get(GenreORM, videogame.genre_id) if videogame.genre_id else None
     USER_ID = 2
     user = db.get(UserORM, USER_ID)
 
-    # ¿El usuario tiene el juego?
-    has_game = False
-    if user and videogame in user.videogames:
-        has_game = True
-
-    # reseñas del juego (las tenemos cargadas en videogame.reviews)
-    reviews = videogame.reviews or []
-
-    # reseña del usuario (si existe)
+    has_game = user and videogame in user.videogames
     user_review = None
     if user:
-        for r in reviews:
-            if r.user_id == user.id:
-                user_review = r
-                break
+        user_review = next((r for r in videogame.reviews if r.user_id == user.id), None)
 
     return templates.TemplateResponse(
         "videogame/detail.html",
@@ -180,48 +107,14 @@ def game_detail(game_id: int, request: Request, db: Session = Depends(get_db)):
             "genre": genre,
             "user": user,
             "has_game": has_game,
-            "reviews": reviews,
+            "reviews": videogame.reviews or [],
             "user_review": user_review
         }
     )
 
-
-'''@router.get("/{game_id}", response_class=HTMLResponse)
-def game_detail(game_id: int, request: Request, db: Session = Depends(get_db)):
-    videogame = db.execute(select(VideogameORM).where(VideogameORM.id == game_id)).scalar_one_or_none()
-    genre = db.execute(select(GenreORM).where(GenreORM.id == videogame.genre_id)).scalar_one_or_none()
-    
-
-    if videogame is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"404 - No existe ningún videojuego con el id {game_id}")
-    
-    # Usuario por defecto 
-    USER_ID = 2
-    user = db.get(UserORM, USER_ID)
-    
-    return templates.TemplateResponse(
-    "videogame/detail.html",
-    {"request": request, "videogame": videogame, "genre": genre, "user": user}
-)
-
-
-# edit videogame by id
-
-@router.get("/{game_id}/edit", response_class=HTMLResponse)
-def form_edit(request: Request, game_id: int, db: Session = Depends(get_db)):
-    game = db.execute(select(VideogameORM).where(VideogameORM.id == game_id)).scalar_one_or_none()
-
-    if game is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="404 - No existe este videojuego")
-     
-    return templates.TemplateResponse(
-         "videogame/form.html",
-         {"request": request, "game": game}
-    )'''
-
-
-# 
-
+# ========================
+# EDITAR VIDEOJUEGO
+# ========================
 @router.post("/{game_id}/edit", response_class=HTMLResponse)
 def edit_videogame(
     request: Request, 
@@ -233,104 +126,60 @@ def edit_videogame(
     developer_id: str = Form(None),
     db: Session = Depends(get_db)               
 ):
+    game = db.get(VideogameORM, game_id)
+    if not game:
+        raise HTTPException(status_code=404, detail="No existe este videojuego")
 
-    game = db.execute(select(VideogameORM).where(VideogameORM.id == game_id)).scalar_one_or_none()
-
-    if game is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="404 - No existe este videojuego")
-    
     errors = []
-
-    form_data = {
-        "title": title,
-        "description": description,
-        "cover_url": cover_url,
-        "genre_id": genre_id,
-        "developer_id": developer_id
-    }
-
     if not title or not title.strip():
         errors.append("El título no puede estar vacío")
-
     title_value = title.strip()
-
-    description_value = None
-    if description and description.strip():
-        description_value = description.strip()
-
-    cover_url_value = None
-    if cover_url and cover_url.strip():
-        cover_url_value = cover_url.strip()
-
-    genre_id_value = None
-    if genre_id and genre_id.strip():
-        try:
-            genre_id_value = int(genre_id.strip())
-            if genre_id_value < 0:
-                errors.append("El id no puede ser un número negativo")
-        except ValueError:
-            errors.append("El id tiene que ser un número válido")
-
-    developer_id_value = None
-    if developer_id and developer_id.strip():
-        try:
-            developer_id_value = int(developer_id.strip())
-            if developer_id_value < 0:
-                errors.append("El id no puede ser un número negativo")
-        except ValueError:
-            errors.append("El id tiene que ser un número válido")
+    description_value = description.strip() if description else None
+    cover_url_value = cover_url.strip() if cover_url else None
+    genre_id_value = int(genre_id.strip()) if genre_id and genre_id.strip().isdigit() else None
+    developer_id_value = int(developer_id.strip()) if developer_id and developer_id.strip().isdigit() else None
 
     if errors:
-        return templates.TemplateResponse(
-            "videogame/form.html",
-            {"request": request, "game": game, "errors": errors, "form_data": form_data}
-        )
-    
+        return templates.TemplateResponse("videogame/form.html", {"request": request, "game": game, "errors": errors})
+
     try:
         game.title = title_value
         game.description = description_value
         game.cover_url = cover_url_value
         game.genre_id = genre_id_value
         game.developer_id = developer_id_value
-
         db.commit()
         db.refresh(game)
-
         return RedirectResponse(url=f"/videogame/{game.id}", status_code=303)
     except Exception as e:
         db.rollback()
-        errors.append(f"No se ha podido crea el videojuego: {str(e)}")
-        return templates.TemplateResponse(
-            "videogame/form.html",
-            {"request": request, "game": game, "errors": errors, "form_data": form_data}
-        )
-        
+        errors.append(f"No se ha podido actualizar el videojuego: {str(e)}")
+        return templates.TemplateResponse("videogame/form.html", {"request": request, "game": game, "errors": errors})
+
 # ========================
-# NUEVO: DESCARGAR / DESINSTALAR VIDEOJUEGO PARA USUARIO POR DEFECTO
+# DESCARGAR / DESINSTALAR VIDEOJUEGO
 # ========================
 @router.post("/{game_id}/download", response_class=HTMLResponse)
 def toggle_download(game_id: int, request: Request, db: Session = Depends(get_db)):
-    USER_ID = 2  # usuario fijo
+    USER_ID = 2
     user = db.get(UserORM, USER_ID)
     game = db.get(VideogameORM, game_id)
-
     if not user or not game:
         raise HTTPException(status_code=404, detail="Usuario o videojuego no encontrado")
 
     message = ""
     if game in user.videogames:
-        # Si ya está, lo quitamos (Desinstalar)
         user.videogames.remove(game)
         message = "Videojuego desinstalado correctamente"
     else:
-        # Si no está, lo añadimos (Descargar)
         user.videogames.append(game)
         message = "Videojuego descargado correctamente"
-
     db.commit()
 
-    # Volvemos al detalle del juego
     genre = db.get(GenreORM, game.genre_id)
+    # Comprobamos si el usuario ya tiene reseña
+    user_review = next((r for r in game.reviews if r.user_id == user.id), None)
+    has_game = game in user.videogames
     return templates.TemplateResponse(
         "videogame/detail.html",
         {
@@ -338,23 +187,9 @@ def toggle_download(game_id: int, request: Request, db: Session = Depends(get_db
             "videogame": game,
             "genre": genre,
             "user": user,
+            "has_game": has_game,
+            "reviews": game.reviews or [],
+            "user_review": user_review,
             "message": message
         }
     )
-
-
-
-
-# @router.post("{game_id}", response_class=HTMLResponse)
-# def add_to_library(game_id: int, db: Session = Depends(get_db)):
-#     user_id = 2
-
-#     game = db.execute(select(VideogameORM).where(VideogameORM.id == game_id)).scalar_one_or_none()
-#     user = db.execute(select(UserORM).where(UserORM == user_id))
-
-#     if game is None:
-#         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"404 - No hay ningún juego con el id {game_id} en la base de datos")
-    
-
-
-            

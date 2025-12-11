@@ -5,7 +5,6 @@
 {% block content %}
 
 <div class="container container-fluid container-detail bg-dark background-detail mt-5 rounded-4 pb-5" style="width: 100%;">
-
     <!-- Navegador rápido -->
     <div class="fw-bold pt-4 ps-3 pb-4">
         <a href="/" class="game-font me-2">Inicio</a><span class="me-2">></span>
@@ -15,11 +14,11 @@
 
     <!-- Juego -->
     <div class="row mt-3">
-        <!-- Portada -->
+        <!-- Portada + Descargar/Desinstalar -->
         <div class="col-12 col-sm-6 col-lg-4 d-flex flex-column justify-content-between align-items-center">
             <img class="rounded-4 border border-2 border-info-subtle img-fluid w-75 mb-3" src="{{ videogame.cover_url }}">
             <form method="post" action="/videogame/{{ videogame.id }}/download" class="w-75 text-center">
-                {% if user and videogame in user.videogames %}
+                {% if user and has_game %}
                     <button type="submit" class="btn btn-danger btn-lg fw-bold w-100">Desinstalar</button>
                 {% else %}
                     <button type="submit" class="btn btn-success btn-lg fw-bold w-100">Descargar</button>
@@ -52,62 +51,17 @@
 
 <!-- Parte de reseñas -->
 <div class="container container-fluid mt-5 container-detail bg-dark background-detail rounded-4 pb-3 mb-5">
-
     <div class="pt-4 mb-3">
         <h1 class="d-flex justify-content-center fw-bold">Reseñas</h1>
     </div>
 
     <div class="container-game-detail px-3">
-        <!-- Formulario añadir reseña -->
-        {% if user and videogame in user.videogames %}
+        <!-- Formulario añadir reseña solo si tiene el juego y no hay reseña -->
+        {% if user and has_game and not user_review %}
         <form method="post" action="/videogame/{{ videogame.id }}/review" class="mb-4">
             <div class="row g-2 mb-2">
                 <div class="col-3">
                     <input type="number" name="rating" class="form-control" placeholder="Nota" min="0" max="10" step="0.1" required>
                 </div>
                 <div class="col-9">
-                    <textarea class="form-control" name="comment" placeholder="Comentario" required></textarea>
-                </div>
-            </div>
-            <button type="submit" class="btn btn-success fw-bold">Enviar reseña</button>
-        </form>
-        {% endif %}
-
-        <!-- Lista de reseñas -->
-        {% if videogame.reviews %}
-            {% for review in videogame.reviews %}
-            <div class="d-flex flex-wrap border-2 border-info-subtle rounded-4 mb-3 p-2 gap-3 align-items-start">
-                <!-- Avatar + Nick -->
-                <div class="card text-center p-2 bg-dark text-white rounded-4" style="width: 80px;">
-                    <div class="avatar rounded-circle d-flex justify-content-center align-items-center mb-1" style="height:50px;width:50px;margin:auto;font-size:1.5rem;">
-                        {{ review.user.nick[0] | upper }}
-                    </div>
-                    <div>{{ review.user.nick }}</div>
-                </div>
-
-                <!-- Nota -->
-                <div class="card text-center p-2 bg-primary text-white rounded-4" style="width: 60px; height: 60px; display:flex; align-items:center; justify-content:center;">
-                    <div class="fw-bold fs-5">
-                        {{ "%.1f"|format(review.rating)|replace(".0","") }}
-                    </div>
-                </div>
-
-                <!-- Comentario -->
-                <div class="card flex-grow-1 p-3 bg-light text-dark rounded-4">
-                    {{ review.comment }}
-                    {% if review.user.id == user.id %}
-                    <div class="mt-2 d-flex gap-2">
-                        <a href="/videogame/{{ videogame.id }}/review/{{ review.id }}/edit" class="btn btn-warning btn-sm">Editar</a>
-                        <a href="/videogame/{{ videogame.id }}/review/{{ review.id }}/delete" class="btn btn-danger btn-sm">Eliminar</a>
-                    </div>
-                    {% endif %}
-                </div>
-            </div>
-            {% endfor %}
-        {% else %}
-            <p class="text-white">No hay reseñas todavía.</p>
-        {% endif %}
-    </div>
-</div>
-
-{% endblock %}
+                    <textarea class="form-control" name="comment" pl

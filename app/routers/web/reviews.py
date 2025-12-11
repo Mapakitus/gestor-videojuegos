@@ -10,65 +10,98 @@ from app.models.videogame import VideogameORM
 
 router = APIRouter(prefix="/videogame", tags=["web-reviews"])
 
+USER_ID = 2  # usuario fijo por defecto
+
+# ========================
+# CREAR RESEÑA
+# ========================
 @router.post("/{game_id}/review")
-def create_review(game_id: int, request: Request, rating: int = Form(...), comment: str = Form(None), db: Session = Depends(get_db)):
-    USER_ID = 2
+def create_review(
+    game_id: int,
+    request: Request,
+    rating: float = Form(...),
+    comment: str = Form(None),
+    db: Session = Depends(get_db)
+):
     user = db.get(UserORM, USER_ID)
     game = db.get(VideogameORM, game_id)
 
     if not user or not game:
         raise HTTPException(status_code=404, detail="Usuario o juego no encontrado")
 
-    # evitar duplicados: un usuario, una reseña por juego
-    existing = db.execute(
-        select(ReviewORM).where(ReviewORM.user_id == user.id, ReviewORM.videogame_id == game_id)
+    # Evitar duplicados: un usuario, una reseña por juego
+    existing_review = db.execute(
+        select(ReviewORM).where(
+            ReviewORM.user_id == user.id,
+            ReviewORM.videogame_id == game.id
+        )
     ).scalar_one_or_none()
 
-    if existing:
-        # ya existe, redirigir al detalle (podríamos mostrar mensaje)
+    if existing_review:
+        # Ya existe reseña, no se puede crear otra
         return RedirectResponse(f"/videogame/{game_id}", status_code=303)
 
     new_review = ReviewORM(
-        rating=float(rating),
+        rating=rating,
         comment=comment,
         user_id=user.id,
-        videogame_id=game_id
+        videogame_id=game.id
     )
     db.add(new_review)
     db.commit()
     return RedirectResponse(f"/videogame/{game_id}", status_code=303)
 
 
+# ========================
+# EDITAR RESEÑA
+# ========================
 @router.post("/{game_id}/review/edit")
-def edit_review(game_id: int, request: Request, rating: int = Form(...), comment: str = Form(None), db: Session = Depends(get_db)):
-    USER_ID = 2
+def edit_review(
+    game_id: int,
+    request: Request,
+    rating: float = Form(...),
+    comment: str = Form(None),
+    db: Session = Depends(get_db)
+):
     user = db.get(UserORM, USER_ID)
     if not user:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
 
     review = db.execute(
-        select(ReviewORM).where(ReviewORM.user_id == user.id, ReviewORM.videogame_id == game_id)
+        select(ReviewORM).where(
+            ReviewORM.user_id == user.id,
+            ReviewORM.videogame_id == game_id
+        )
     ).scalar_one_or_none()
 
     if not review:
-        # no hay reseña que editar
+        # No hay reseña que editar
         return RedirectResponse(f"/videogame/{game_id}", status_code=303)
 
-    review.rating = float(rating)
+    review.rating = rating
     review.comment = comment
     db.commit()
     return RedirectResponse(f"/videogame/{game_id}", status_code=303)
 
 
+# ========================
+# ELIMINAR RESEÑA
+# ========================
 @router.post("/{game_id}/review/delete")
-def delete_review(game_id: int, request: Request, db: Session = Depends(get_db)):
-    USER_ID = 2
+def delete_review(
+    game_id: int,
+    request: Request,
+    db: Session = Depends(get_db)
+):
     user = db.get(UserORM, USER_ID)
     if not user:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
 
     review = db.execute(
-        select(ReviewORM).where(ReviewORM.user_id == user.id, ReviewORM.videogame_id == game_id)
+        select(ReviewORM).where(
+            ReviewORM.user_id == user.id,
+            ReviewORM.videogame_id == game_id
+        )
     ).scalar_one_or_none()
 
     if review:

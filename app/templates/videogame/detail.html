@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Detalles - {{ videogame.title }}{% endblock%}
+{% block title %}Detalles - {{ videogame.title }}{% endblock %}
 
 {% block content %}
 
@@ -9,7 +9,7 @@
     <!-- navegador rapido -->
     <div class="fw-bold pt-4 ps-3 pb-4">
         <a href="/" class="game-font me-2">Inicio</a><span class="me-2"> ></span>
-        <a href="/genres" class="game-font me-2" >Géneros</a><span class="me-2"> ></span>
+        <a href="/genres" class="game-font me-2">Géneros</a><span class="me-2"> ></span>
         <a href="/genres/{{ videogame.genre_id }}" class="game-font">{{ genre.name }}</a>
     </div>
 
@@ -39,7 +39,7 @@
 
             <div class="d-flex justify-content-center mt-auto">
                 <form method="post" action="/videogame/{{ videogame.id }}/download" class="text-center">
-                    {% if user and videogame in user.videogames %}
+                    {% if has_game %}
                         <button type="submit" class="btn btn-danger btn-lg fw-bold">Desinstalar</button>
                     {% else %}
                         <button type="submit" class="btn btn-success btn-lg fw-bold">Descargar</button>
@@ -62,8 +62,8 @@
     </div>
 
     <div class="container-game-detail px-5">
-        <!-- Formulario añadir reseña solo si el usuario tiene el juego -->
-        {% if user and videogame in user.videogames and not user_review %}
+        <!-- Formulario añadir reseña solo si el usuario tiene el juego y no tiene reseña -->
+        {% if has_game and not user_review %}
         <form method="post" action="/videogame/{{ videogame.id }}/review" class="mb-4">
             <div class="input-group pb-3">
                 <span class="input-group-text bg-dark text-white">Nota</span>

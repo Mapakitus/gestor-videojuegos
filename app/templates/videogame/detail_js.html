@@ -1,0 +1,292 @@
+{% extends "base.html" %}
+
+{% block title %}Detalles - {{ videogame.title }}{% endblock %}
+
+{% block content %}
+
+<div class="container container-fluid container-detail bg-dark background-detail mt-5 rounded-4 pb-5" style="width: 100%;">
+
+    <!-- navegador rápido -->
+    <div class="fw-bold pt-4 ps-3 pb-4">
+        <a href="/" class="game-font me-2">Inicio</a><span class="me-2"> ></span>
+        <a href="/genres" class="game-font me-2">Géneros</a><span class="me-2"> ></span>
+        <a href="/genres/{{ genre.id }}" class="game-font">{{ genre.name }}</a>
+    </div>
+
+    <!-- juego -->
+    <div class="row mt-3">
+        <!-- Portada -->
+        <div class="col-12 col-sm-6 col-lg-4 d-flex flex-column align-items-center justify-content-between">
+            <img class="rounded-4 border border-2 border-info-subtle img-fluid w-75 mb-3" src="{{ videogame.cover_url }}">
+
+            <form method="post" action="/videogame/{{ videogame.id }}/download" class="w-75 text-center">
+                {% if has_game %}
+                    <button type="submit" class="btn btn-danger btn-lg fw-bold w-100">Desinstalar</button>
+                {% else %}
+                    <button type="submit" class="btn btn-success btn-lg fw-bold w-100">Descargar</button>
+                {% endif %}
+            </form>
+
+            {% if message %}
+            <div class="mt-2 text-center text-white fw-bold">{{ message }}</div>
+            {% endif %}
+        </div>
+
+        <!-- Título y descripción -->
+        <div class="col-12 col-sm-6 col-lg-4 pt-5 d-flex flex-column justify-content-center">
+            <h1 class="fs-2 fw-bold">{{ videogame.title }}</h1>
+            <p>{{ videogame.description }}</p>
+        </div>
+
+        <!-- Desarrollador y género -->
+        <div class="col-12 col-sm-6 col-lg-4 d-flex flex-column justify-content-center">
+            <div class="d-flex align-items-start mb-3 gap-2">
+                <a href="/developers/{{ videogame.developer.id }}" class="game-font fs-5 text-center border rounded-4 p-2 flex-grow-1">
+                    {{ videogame.developer.name }}
+                </a>
+                <a href="/genres/{{ videogame.genre.id }}" class="game-font fs-5 text-center border rounded-4 p-2 flex-grow-1">
+                    {{ videogame.genre.name }}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Parte de reseñas -->
+<div class="container container-fluid mt-5 container-detail bg-dark background-detail rounded-4 pb-3 mb-5">
+
+    <div class="pt-4 mb-3">
+        <h1 class="d-flex justify-content-center fw-bold">Reseñas</h1>
+    </div>
+
+    <div class="container-game-detail px-3">
+
+        <!-- Botón Nueva reseña -->
+        {% if has_game and not user_review %}
+        <div class="d-flex justify-content-center mb-4">
+            <button type="button" class="btn btn-success fw-bold" data-bs-toggle="modal" data-bs-target="#newReviewModal">
+                Añadir reseña
+            </button>
+        </div>
+        {% endif %}
+
+        <!-- Modal Nueva reseña -->
+        <div class="modal fade" id="newReviewModal" tabindex="-1">
+          <div class="modal-dialog">
+            <div class="modal-content bg-dark text-white">
+              <div class="modal-header">
+                <h5 class="modal-title">Nueva reseña</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <form id="newReviewForm">
+                  <div class="modal-body">
+                      <div class="mb-3">
+                          <label class="form-label">Nota</label>
+                          <input type="number" name="rating" class="form-control" min="0" max="10" step="0.1" required>
+                      </div>
+                      <div class="mb-3">
+                          <label class="form-label">Comentario</label>
+                          <textarea name="comment" class="form-control" required></textarea>
+                      </div>
+                  </div>
+                  <div class="modal-footer">
+                      <button type="submit" class="btn btn-success">Enviar</button>
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                  </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lista de reseñas -->
+        <div id="reviewsContainer">
+
+        {% for review in videogame.reviews %}
+            <div class="review-item d-flex flex-wrap border-2 border-info-subtle rounded-4 mb-3 p-2 gap-3 align-items-start"
+                id="review-{{ review.id }}"
+                data-id="{{ review.id }}"
+                data-rating="{{ review.rating }}"
+                data-comment="{{ review.comment }}">
+                
+                <!-- Avatar + Nick -->
+                <div class="card text-center p-2 bg-dark text-white rounded-4" style="width: 80px;">
+                    <div class="avatar rounded-circle d-flex justify-content-center align-items-center mb-1" style="height:50px;width:50px;margin:auto;font-size:1.5rem;">
+                        {{ review.user.nick[0] | upper }}
+                    </div>
+                    <div>{{ review.user.nick }}</div>
+                </div>
+
+                <!-- Nota -->
+                <div class="card text-center p-2 bg-primary text-white rounded-4"
+                     style="width: 60px; height: 60px; display:flex; align-items:center; justify-content:center;">
+                    <div class="fw-bold fs-5 rating-value">{{ "%.1f"|format(review.rating)|replace(".0","") }}</div>
+                </div>
+
+                <!-- Comentario -->
+                <div class="card flex-grow-1 p-3 bg-light text-dark rounded-4 comment-value">
+                    {{ review.comment }}
+
+                    {% if review.user.id == user.id %}
+                    <div class="mt-2 d-flex gap-2">
+                        <button type="button" class="btn btn-warning btn-sm edit-btn">Editar</button>
+                        <button type="button" class="btn btn-danger btn-sm delete-btn">Eliminar</button>
+                    </div>
+                    {% endif %}
+                </div>
+
+            </div>
+        {% endfor %}
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal EDITAR -->
+<div class="modal fade" id="editReviewModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header">
+        <h5 class="modal-title">Editar reseña</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <form id="editReviewForm">
+          <input type="hidden" name="id">
+          <div class="modal-body">
+              <div class="mb-3">
+                  <label class="form-label">Nota</label>
+                  <input type="number" name="rating" class="form-control" min="0" max="10" step="0.1" required>
+              </div>
+              <div class="mb-3">
+                  <label class="form-label">Comentario</label>
+                  <textarea name="comment" class="form-control" required></textarea>
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button type="submit" class="btn btn-success">Guardar cambios</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal ELIMINAR -->
+<div class="modal fade" id="deleteReviewModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header">
+        <h5 class="modal-title">Eliminar reseña</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <form id="deleteReviewForm">
+          <input type="hidden" name="id">
+          <div class="modal-body">
+              ¿Seguro que quieres eliminar tu reseña?
+          </div>
+          <div class="modal-footer">
+              <button type="submit" class="btn btn-danger">Eliminar</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- JS: manejo de modales + fetch -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    // ===========================
+    // NUEVA RESEÑA
+    // ===========================
+    document.getElementById("newReviewForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const data = new FormData(form);
+
+        const res = await fetch("/videogame/{{ videogame.id }}/review", {
+            method: "POST",
+            body: data,
+        });
+
+        const json = await res.json();
+
+        if (json.ok) {
+            location.reload(); // más fácil: recargamos y listo
+        }
+    });
+
+
+    // ===========================
+    // EDITAR
+    // ===========================
+    const editModal = new bootstrap.Modal(document.getElementById("editReviewModal"));
+    const editForm = document.getElementById("editReviewForm");
+
+    document.querySelectorAll(".edit-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const box = btn.closest(".review-item");
+            const id = box.dataset.id;
+            const rating = box.dataset.rating;
+            const comment = box.dataset.comment;
+
+            editForm.id.value = id;
+            editForm.rating.value = rating;
+            editForm.comment.value = comment;
+
+            editModal.show();
+        });
+    });
+
+    editForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const data = new FormData(editForm);
+
+        const res = await fetch("/videogame/{{ videogame.id }}/review/edit", {
+            method: "POST",
+            body: data,
+        });
+
+        const json = await res.json();
+
+        if (json.ok) {
+            location.reload();
+        }
+    });
+
+
+    // ===========================
+    // ELIMINAR
+    // ===========================
+    const deleteModal = new bootstrap.Modal(document.getElementById("deleteReviewModal"));
+    const deleteForm = document.getElementById("deleteReviewForm");
+
+    document.querySelectorAll(".delete-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const box = btn.closest(".review-item");
+            deleteForm.id.value = box.dataset.id;
+            deleteModal.show();
+        });
+    });
+
+    deleteForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const data = new FormData(deleteForm);
+
+        const res = await fetch("/videogame/{{ videogame.id }}/review/delete", {
+            method: "POST",
+            body: data,
+        });
+
+        const json = await res.json();
+
+        if (json.ok) {
+            location.reload();
+        }
+    });
+
+});
+
+</script>
+
+{% endblock %}

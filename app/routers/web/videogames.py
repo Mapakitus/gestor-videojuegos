@@ -2,13 +2,13 @@ from fastapi import APIRouter, Depends, Form, HTTPException, Request, status
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 
 from app.database import get_db
 from app.models.genre import GenreORM
 from app.models.user import UserORM
 from app.models.videogame import VideogameORM
-
+from app.models.review import ReviewORM
 
 templates = Jinja2Templates(directory="app/templates/")
 
@@ -132,8 +132,61 @@ def create(
         )
     
 # show detail videogame
-
 @router.get("/{game_id}", response_class=HTMLResponse)
+def game_detail(game_id: int, request: Request, db: Session = Depends(get_db)):
+    # Cargar videojuego + reseñas + usuario de cada reseña
+    stmt = (
+        select(VideogameORM)
+        .where(VideogameORM.id == game_id)
+        .options(
+            selectinload(VideogameORM.reviews).selectinload(ReviewORM.user)
+        )
+    )
+    videogame = db.execute(stmt).scalar_one_or_none()
+
+    if videogame is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"404 - No existe ningún videojuego con el id {game_id}")
+
+    # cargar género (si existe)
+    genre = None
+    if videogame.genre_id is not None:
+        genre = db.get(GenreORM, videogame.genre_id)
+
+    # Usuario por defecto
+    USER_ID = 2
+    user = db.get(UserORM, USER_ID)
+
+    # ¿El usuario tiene el juego?
+    has_game = False
+    if user and videogame in user.videogames:
+        has_game = True
+
+    # reseñas del juego (las tenemos cargadas en videogame.reviews)
+    reviews = videogame.reviews or []
+
+    # reseña del usuario (si existe)
+    user_review = None
+    if user:
+        for r in reviews:
+            if r.user_id == user.id:
+                user_review = r
+                break
+
+    return templates.TemplateResponse(
+        "videogame/detail.html",
+        {
+            "request": request,
+            "videogame": videogame,
+            "genre": genre,
+            "user": user,
+            "has_game": has_game,
+            "reviews": reviews,
+            "user_review": user_review
+        }
+    )
+
+
+'''@router.get("/{game_id}", response_class=HTMLResponse)
 def game_detail(game_id: int, request: Request, db: Session = Depends(get_db)):
     videogame = db.execute(select(VideogameORM).where(VideogameORM.id == game_id)).scalar_one_or_none()
     genre = db.execute(select(GenreORM).where(GenreORM.id == videogame.genre_id)).scalar_one_or_none()
@@ -164,7 +217,7 @@ def form_edit(request: Request, game_id: int, db: Session = Depends(get_db)):
     return templates.TemplateResponse(
          "videogame/form.html",
          {"request": request, "game": game}
-    )
+    )'''
 
 
 # 
@@ -207,7 +260,7 @@ def edit_videogame(
 
     cover_url_value = None
     if cover_url and cover_url.strip():
-        cover_url_value = cover_url
+        cover_url_value = cover_url.strip()
 
     genre_id_value = None
     if genre_id and genre_id.strip():
@@ -229,7 +282,7 @@ def edit_videogame(
 
     if errors:
         return templates.TemplateResponse(
-            "videogames/form.html",
+            "videogame/form.html",
             {"request": request, "game": game, "errors": errors, "form_data": form_data}
         )
     

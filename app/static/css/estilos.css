@@ -189,3 +189,16 @@ a.game-font:hover {
     background-color: #0f0f0f;
     width: 870px;
 }
+
+/* Avatar review */
+.avatar-small {
+    width:48px;
+    height:48px;
+    border-radius:50%;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+    color: #fff;
+    background:#6c757d; /* gris bootstrap */
+}

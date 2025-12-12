@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container mt-4">
-    <h1>Mi Biblioteca de Videojuegos</h1>
+<!-- <div class="container mt-4">
+    <h1 class="d-flex justify-content-center">Mi Biblioteca de Videojuegos</h1>
 
     {% if games %}
-        <table class="table table-striped mt-3 align-middle">
-            <thead>
+        <table class="table table-striped mt-3 align-middle table-dark">
+            <thead class="bg-dark">
                 <tr>
                     <th>Portada</th>
                     <th>Título</th>
@@ -15,7 +15,7 @@
                     <th>Desarrolladora</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="bg-dark">
                 {% for game in games %}
                 <tr>
                     <td>
@@ -33,6 +33,59 @@
                 {% endfor %}
             </tbody>
         </table>
+
+        <div class="container mi-div bg-dark pt-4 rounded-4">
+            <div class="container row">
+                {% for game in games %}
+                    <a class="col-12 col-sm-6 col-md-3 mb-3 text-decoration-none text-white" href="">
+                        <div class="game-card">
+                            <img class="game-img img-fluid" src="{{ game.cover_url}}">
+                            <div class="text-center">{{ game.title }}</div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+                
+
+        </div> -->
+
+<div class="container mt-5 mb-4">
+    <h1 class="text-center pb-5">Mi Biblioteca de Videojuegos</h1>
+
+    {% if games %}
+    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+        {% for game in games %}
+        <div class="col">
+            <div class="card bg-dark text-white h-100 shadow">
+                
+                {% if game.cover_url %}
+                <a href="/videogame/{{ game.id }}" class="library-card">
+                    <img src="{{ game.cover_url }}" class="card-img-top" alt="{{ game.title }}" style="height: 250px; object-fit: cover;">
+                </a>
+                {% else %}
+                <div class="d-flex align-items-center justify-content-center bg-secondary" style="height: 250px;">
+                    <span class="text-muted">Sin imagen</span>
+                </div>
+                {% endif %}
+
+                <div class="card-body">
+                    <h5 class="card-title pb-2">{{ game.title }}</h5>
+                    <p class="card-text small">{{ game.description or "Sin descripción" }}</p>
+                </div>
+
+                <div class="card-footer small text-white">
+                    {{ game.genre.name if game.genre else "Género desconocido" }}
+                    · {{ game.developer.name if game.developer else "Desarrolladora desconocida" }}
+                </div>
+
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+
     {% else %}
         <p>No tienes juegos en tu biblioteca.</p>
     {% endif %}

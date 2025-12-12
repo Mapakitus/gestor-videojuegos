@@ -117,6 +117,23 @@ body {
     width: 100%;
 }
 
+/* Library */
+
+.library-card {
+    overflow: hidden;
+    background: #1a1a1a;
+    transition: transform .2s;
+}
+.library-card:hover {
+    transform: scale(1.05);
+}
+.library-img {
+    height: 250px;
+    object-fit: cover;
+    width: 100%;
+}
+
+
 /* Carousel */
 .carousel-row {
     overflow-x: auto;
@@ -202,3 +219,4 @@ a.game-font:hover {
     color: #fff;
     background:#6c757d; /* gris bootstrap */
 }
+

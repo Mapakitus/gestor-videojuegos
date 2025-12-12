@@ -29,15 +29,19 @@
         <!-- Desarrollador, género y descargar/desinstalar -->
         <div class="col-12 col-sm-6 col-lg-4 d-flex flex-column justify-content-end">
             <div class="d-flex align-items-start mb-3">
+                {% if videogame.developer.name %}
                 <a href="/developers/{{ videogame.developer.id }}" class="game-font fs-5 text-center border rounded-4 p-2 me-2">
                     {{ videogame.developer.name }}
                 </a>
+                {% endif %}
+                {% if videogame.genre.name %}
                 <a href="/genres/{{ videogame.genre.id }}" class="game-font fs-5 text-center border rounded-4 p-2">
                     {{ videogame.genre.name }}
                 </a>
+                {% endif %}
             </div>
 
-            <div class="d-flex justify-content-center mt-auto">
+            <div class="d-flex justify-content-center mt-auto ">
                 <form method="post" action="/videogame/{{ videogame.id }}/download" class="text-center">
                     {% if has_game %}
                         <button type="submit" class="btn btn-danger btn-lg fw-bold">Desinstalar</button>
@@ -45,7 +49,7 @@
                         <button type="submit" class="btn btn-success btn-lg fw-bold">Descargar</button>
                     {% endif %}
                 </form>
-            </div>
+            </div class="">
 
             {% if message %}
             <div class="mt-2 text-center text-white fw-bold">{{ message }}</div>
@@ -55,25 +59,27 @@
 </div>
 
 <!-- Parte de los comentarios -->
-<div class="container container-fluid mt-5 container-detail bg-dark background-detail rounded-4 pb-3 mb-5">
+<div class="container container-fluid mt-5 container-detail background-detail rounded-4 pb-3 mb-5" style="background-color: #334c66;">
 
-    <div class="pt-4">
+    <div class="pt-4 pb-5">
         <h1 class="align-items-center justify-content-center d-flex fw-bold">Reseñas</h1>
     </div>
 
     <div class="container-game-detail px-5">
         <!-- Formulario añadir reseña solo si el usuario tiene el juego y no tiene reseña -->
         {% if has_game and not user_review %}
-        <form method="post" action="/videogame/{{ videogame.id }}/review" class="mb-4">
-            <div class="input-group pb-3">
-                <span class="input-group-text bg-dark text-white">Nota</span>
-                <input type="number" name="rating" class="form-control" min="0" max="10" step="0.1" required>
-            </div>
-            <div class="input-group pb-3">
-                <span class="input-group-text bg-dark text-white">Comentario</span>
-                <textarea class="form-control" name="comment" aria-label="With textarea" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-success fw-bold">Enviar reseña</button>
+        <form method="post" action="/videogame/{{ videogame.id }}/review" class="mb-4 pb-4">
+                <div class="input-group pb-3">
+                    <span class="input-group-text bg-dark text-white " style="border: none;">Comentario</span>
+                    <textarea class="form-control text-white bg-dark" style="border: none;" name="comment" aria-label="With textarea" required></textarea>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <div class="input-group pe-2" style="width: 140px; ">
+                        <span class="input-group-text bg-dark text-white" style="border: none;">Nota</span>
+                        <input type="number" name="rating" class="form-control bg-dark text-white" style="border: none;" min="0" max="10" step="0.1" required>
+                    </div>
+                    <button type="submit" class="btn btn-success fw-bold" ><i class="fa-regular fa-paper-plane"></i></button>
+                </div>
         </form>
         {% endif %}
 
@@ -81,34 +87,42 @@
         {% if videogame.reviews %}
             {% for review in videogame.reviews %}
             <div class="border-2 border-info-subtle mb-3 rounded-4 p-2 d-flex gap-3">
-                <!-- Avatar + Nick -->
-                <div class="card text-center p-2 bg-dark text-white rounded-4" style="width: 80px;">
-                    <div class="avatar rounded-circle d-flex justify-content-center align-items-center mb-1">
-                        {{ review.user.nick[0] | upper }}
-                    </div>
-                    <div>{{ review.user.nick }}</div>
-                </div>
-
-                <!-- Nota -->
-                <div class="card text-center p-2 bg-primary text-white rounded-4" style="width: 60px;">
-                    <div class="fw-bold fs-5">
-                        {{ "%.1f"|format(review.rating)|replace(".0","") }}
-                    </div>
-                </div>
-
                 <!-- Comentario -->
-                <div class="card flex-grow-1 p-3 bg-light text-dark rounded-4">
-                    {{ review.comment }}
+                <div class="d-flex p-3 bg-dark text-white rounded-4" style="width: 100%;">
+                    <div class="">
+                        <!-- Avatar + Nick -->
+                        <div class="d-flex flex-column align-items-center">
+                            <div class=" text-center p-2 text-white align-items-center rounded-top d-flex flex-column" style="width: 80px; background-color: #334c66;">
+                                <div class="avatar-small rounded-circle bg-dark mb-1">
+                                    {{ review.user.nick[0] | upper }}
+                                </div>
+                                <div>{{ review.user.nick }}</div>
+                            </div>
+                            
+                            <!-- Nota -->
+                            <div class=" text-center p-2 bg-primary text-white rounded-bottom" style="width: 80px;">
+                                <div class="fw-bold fs-5">
+                                    {{ "%.1f"|format(review.rating)|replace(".0","") }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex-fill ms-3 fs-5">
+                        {{ review.comment }}
+                    </div>
 
                     {% if review.user.id == user.id %}
-                    <div class="mt-2 d-flex gap-2">
+                    <div class="d-flex flex-wrap justify-content-end gap-2 align-self-end">
                         <!-- Botón Editar modal -->
-                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editReviewModal{{ review.id }}">Editar</button>
-
+                        <button type="button" class="btn btn-warning btn-sm me-2 " data-bs-toggle="modal" data-bs-target="#editReviewModal{{ review.id }}">Editar</button>
+                        
                         <!-- Botón Eliminar modal -->
                         <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteReviewModal{{ review.id }}">Eliminar</button>
                     </div>
-
+                    
+                </div>
+                    
                     <!-- Modal Editar -->
                     <div class="modal fade" id="editReviewModal{{ review.id }}" tabindex="-1" aria-labelledby="editReviewLabel{{ review.id }}" aria-hidden="true">
                       <div class="modal-dialog">

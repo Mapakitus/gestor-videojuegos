@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="/app/static/gestor_de_videojuegos.png" alt="Gestor de Videojuegos Banner" width="800">
+  <img src="/app/static/favicon.png" alt="Gestor de Videojuegos Banner" width="800">
 </p>
 
 # 🎮 Gestor de Videojuegos — Proyecto en Python 🐍  
@@ -36,7 +36,6 @@ Este trabajo forma parte del curso **Python + IA**, y tiene como finalidad refor
 | Integrantes
 |------------- 
 | Paco Gutiérrez Frías 
-| Lueyo Suárez González 
 | Jon Fernandes Aizcorbe
 
 ---

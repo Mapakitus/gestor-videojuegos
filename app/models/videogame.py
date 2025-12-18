@@ -8,7 +8,7 @@ class VideogameORM(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     title: Mapped[str] = mapped_column(String, nullable=False)
-    description: Mapped[str | None] = mapped_column(String)
+    description: Mapped[str | None] = mapped_column(String(1000))
     cover_url: Mapped[str | None] = mapped_column(String, nullable=True)
 
     genre_id: Mapped[int | None] = mapped_column(ForeignKey("genres.id"))

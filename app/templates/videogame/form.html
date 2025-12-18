@@ -29,7 +29,7 @@
                     name="title" 
                     value="{% if form_data %}{{ form_data.get('title', '') }}{% elif game %}{{game.title}}{% endif %}" 
                     required
-                    maxlength="100">
+                    maxlength="255">
             <div class="form-text text-white">Este campo es obligatorio. (máx. 100 carácteres)</div>
         </div>
 
@@ -40,7 +40,7 @@
                     id="description" 
                     name="description" 
                     value="{{ form_data.get('description', '') if form_data else game.description if game and game.description else ''}}" 
-                    maxlength="250">
+                    maxlength="1000">
             <div class="form-text text-white">Este campo no es obligatorio. (máx. 250 carácteres) </div>
         </div>
 
@@ -56,7 +56,7 @@
         </div>
 
         <div class="mb-4">
-            <label for="genre" class="form-label">Género Id</label>
+            <label for="genre" class="form-label">Género</label>
             <select class="form-select" name="genre_id" id="genre_id">
                 <option value="">Selecciona un género</option>
                 {% for genre in genres %}
@@ -66,7 +66,7 @@
             <div class="form-text text-white">Este campo no es obligatorio.</div>
         </div>  
         <div class="mb-4">
-            <label for="developer_id" class="form-label">Desarrolladora Id</label>
+            <label for="developer_id" class="form-label">Desarrolladora</label>
             <select class="form-select" name="developer_id" id="developer_id">
                 <option value="">Selecciona una desarrolladora</option>
                 {% for dev in devs %}

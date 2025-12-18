@@ -6,7 +6,7 @@
 <div class="mt-5">
     <h1 class="d-flex justify-content-center">Usuarios</h1>
     <div class="d-flex justify-content-end">
-        <a href="">
+        <a href="/admin/user/new">
             <button class="btn btn-success">Crear usuario</button>
         </a>
     </div>
@@ -26,10 +26,10 @@
                 
                 <td>
                     <div class="d-flex justify-content-end">
-                        <a href="" class="px-2">
+                        <a href="/admin/user/{{ user.id }}/edit" class="px-2">
                             <button class="btn btn-warning mt-2">Editar</button>
                         </a>
-                        <form method="post" action="" style="display: inline" onsubmit="return confirm('¿Estás seguro que quieres eliminar este videojuego?');">   
+                        <form method="post" action="/admin/user/{{ user.id }}/delete" style="display: inline" onsubmit="return confirm('¿Estás seguro que quieres eliminar este videojuego?');">   
                             <button type="submit" class="btn btn-danger mt-2 me-3">Eliminar</button>
                         </form>
                     </div>

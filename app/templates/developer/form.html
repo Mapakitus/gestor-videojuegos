@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}{% if genre %}Editar Género{% else %}Crear Género{% endif %}{% endblock %}
+
+{% block content %}
+<div class="container bg-dark form mt-5 pt-2 pb-3 rounded-4 text-white">
+
+    {% if errors %}
+    <div class="alert alert-danger" role="alert">
+        <h5 class="alert-heading"><i class="fa-solid fa-triangle-exclamation"></i> Errores de validación:</h5>
+        <ul class="mb-0">
+            {% for error in errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <form method="post" action="{% if developer %}/admin/developer/{{ developer.id }}/edit{% else %}/admin/developer/new{% endif %}">
+        <div class="d-flex justify-content-center">
+            <h1>{% if developer %}Editar desarrolladora{% else %}Crea una nueva desarrolladora{% endif %}</h1>
+        </div>
+        <div class="mb-3">
+            <label for="name" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="name" name="name" 
+                   value="{% if form_data %}{{ form_data.get('name')}}{% elif developer %}{{ developer.name }}{% endif %}" 
+                   required maxlength="100">
+            <div class="form-text text-white">Este campo es obligatorio. (máx. 100 carácteres)</div>
+        </div>
+        <div class="mb-3">
+            <label for="image" class="form-label">Imagen</label>
+            <input type="text" class="form-control" id="image" name="image_url" 
+                   value="{% if form_data %}{{ form_data.get('image_url') }}{% elif developer %}{{ developer.image_url }}{% endif %}" 
+                   required maxlength="1000">
+            <div class="form-text text-white">Este campo es obligatorio. (máx. 1000 carácteres)</div>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+{% endblock %}

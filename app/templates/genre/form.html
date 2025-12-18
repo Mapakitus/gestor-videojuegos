@@ -16,7 +16,7 @@
     </div>
     {% endif %}
 
-    <form method="post" action="{% if genre %}/genres/{{ genre.id }}/edit{% else %}/genres/new{% endif %}">
+    <form method="post" action="{% if genre %}/admin/genre/{{ genre.id }}/edit{% else %}/admin/genre/new{% endif %}">
         <div class="d-flex justify-content-center">
             <h1>{% if genre %}Editar género{% else %}Crea un nuevo género{% endif %}</h1>
         </div>

@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block title %}Perfil - GameLibrary{% endblock %}
+
+{% block content %}
+
+<style>
+  .avatar-lg { width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 3px solid rgba(255,255,255,0.06); }
+  .profile-card { background: #0b1220; }
+  .meta-item { color: #9fb0c8; }
+  .bio { white-space: pre-wrap; }
+  a.text-white.text-decoration-none { text-decoration: none !important; }
+</style>
+
+  <div class="bg-dark mt-5 mb-5 pb-4 rounded-4">
+    <div class="pt-3 ps-3 d-flex">
+      <a class="game-font me-2 text-white text-decoration-none" href="/">Inicio</a><span class="me-2">></span>
+      <a class="game-font text-white text-decoration-none" href="/users">Usuarios</a>
+    </div>
+
+    <div class="d-flex flex-column align-items-center">
+      <div class="title-section mb-4 text-center">
+        <h1 class="genre_name">Perfil de usuario</h1>
+      </div>
+
+      <div class="card profile-card p-4 rounded-4 border-0 shadow-sm w-100 text-white" style="max-width:900px;">
+        <div class="d-flex gap-4 align-items-start">
+          <img src="/static/favicon.png" class="avatar-lg">
+
+          <div class="flex-grow-1">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <h2 class="mb-1">Nombre de Usuario</h2>
+                <div class="meta-item mb-2">@nickusuario • Ciudad, País</div>
+              </div>
+              <div>
+                <button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#editProfileModal">Editar perfil</button>
+              </div>
+            </div>
+
+            <p class="bio mb-3">Aquí va la biografía del usuario. Puedes escribir varias líneas y se mantendrá el formato.
+Ej: Amante de los videojuegos retro y desarrollador indie. Colecto soundtracks y participo en jams.</p>
+
+            <div class="d-flex gap-3 flex-wrap">
+              <div class="small">Miembro desde: <strong class="text-white">2024</strong></div>
+              <div class="small">Juegos: <strong class="text-white">42</strong></div>
+              <div class="small">Reseñas: <strong class="text-white">12</strong></div>
+            </div>
+<!-- 
+            <div class="mt-3">
+              <a class="btn btn-light btn-sm me-2 text-decoration-none" href="#">Seguir</a>
+              <a class="btn btn-outline-light btn-sm text-decoration-none" href="#">Mensaje</a>
+            </div> -->
+          </div>
+        </div>
+      </div>
+
+      <div class="card mt-4 p-3 bg-secondary bg-opacity-10 border-0 rounded-4 w-100" style="max-width:900px;">
+        <div class="row gy-2">
+          <div class="col-12 col-md-6">
+            <h6 class="mb-1 text-white">Información</h6>
+            <p class="mb-0 meta-item">Email: <span class="text-white">usuario@example.com</span></p>
+            <p class="mb-0 meta-item">Sitio: <a class="text-white text-decoration-none" href="#">https://example.com</a></p>
+          </div>
+          <div class="col-12 col-md-6">
+            <h6 class="mb-1 text-white">Redes</h6>
+            <div class="d-flex gap-2">
+              <a class="btn btn-outline-light btn-sm text-white text-decoration-none" href="#">Twitter</a>
+              <a class="btn btn-outline-light btn-sm text-white text-decoration-none" href="#">Discord</a>
+              <a class="btn btn-outline-light btn-sm text-white text-decoration-none" href="#">GitHub</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Modal editar perfil (solo frontend) -->
+  <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-dark text-white rounded-4">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editProfileModalLabel">Editar perfil</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <form action="#" method="post" enctype="multipart/form-data">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label">Avatar</label>
+              <input class="form-control form-control-sm" type="file" accept="image/*">
+              <div class="form-text">Formato JPG/PNG. Máx. 2MB.</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Nombre</label>
+              <input type="text" class="form-control" value="Nombre de Usuario">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Biografía</label>
+              <textarea class="form-control" rows="4">Aquí va la biografía del usuario...</textarea>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Ubicación</label>
+              <input type="text" class="form-control" value="Ciudad, País">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Sitio web</label>
+              <input type="url" class="form-control" value="https://example.com">
+            </div>
+
+            <div class="row">
+              <div class="col-6 mb-3">
+                <label class="form-label">Twitter</label>
+                <input type="text" class="form-control" placeholder="@usuario">
+              </div>
+              <div class="col-6 mb-3">
+                <label class="form-label">GitHub</label>
+                <input type="text" class="form-control" placeholder="usuario">
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

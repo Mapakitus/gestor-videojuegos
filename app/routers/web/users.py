@@ -30,7 +30,7 @@ def detail_by_id(request: Request, user_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"No existe ningún usuario con el id {user_id}")
     
     return templates.TemplateResponse(
-        "user/detail.html",
+        "user/profile.html",
         {"request": request, "user": user}
     )
 

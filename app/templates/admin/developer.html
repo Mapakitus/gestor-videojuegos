@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{%  block title %}Videojuegos - Admin{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="d-flex justify-content-center">Listado de videojuegos</h1>
+    <div class="d-flex justify-content-end">
+        <a href="/admin/developer/new">
+            <button class="btn btn-success mt-5">Crear nuevo Videojuego</button>
+        </a>
+            
+    </div>
+    
+    <table class="table table-dark table-striped mt-2">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>IMAGEN</th>
+                <th>Nombre</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for dev in developers %}
+            <tr>
+                <td>{{ dev.id }}</td>
+                <td><img class="" style="width: 100px;" src="{{ dev.image_url }}"></td>
+                <td>{{ dev.name }}</td>
+                <td><a href="/admin/developer/{{ dev.id }}/edit">
+                        <button class="btn btn-warning mt-2">Editar</button>
+                    </a>
+                </td>
+                <td>
+                    <form method="post" action="/admin/developer/{{ dev.id }}/delete" style="display: inline" onsubmit="return confirm('¿Estás seguro que quieres eliminar este videojuego?');">   
+                        <button type="submit" class="btn btn-danger mt-2">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

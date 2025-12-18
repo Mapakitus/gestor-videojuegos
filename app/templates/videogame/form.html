@@ -16,7 +16,7 @@
     </div>
     {% endif %}
 
-    <form method="post" action="{% if game %}/videogame/{{ game.id }}/edit{% else %}/videogame/new{% endif %}">
+    <form method="post" action="{% if game %}/admin/videogame/{{ game.id }}/edit{% else %}/admin/videogame/new{% endif %}">
         <div class="d-flex justify-content-center">
             <h1>{% if game %}Edita un videojuego{% else %}Crear un videojuego{% endif %}</h1>
         </div>
@@ -30,7 +30,7 @@
                     value="{% if form_data %}{{ form_data.get('title', '') }}{% elif game %}{{game.title}}{% endif %}" 
                     required
                     maxlength="100">
-            <div class="form-text text-white">Este campo no es obligatorio. (máx. 100 carácteres)</div>
+            <div class="form-text text-white">Este campo es obligatorio. (máx. 100 carácteres)</div>
         </div>
 
         <div class="mb-4">
@@ -40,7 +40,7 @@
                     id="description" 
                     name="description" 
                     value="{{ form_data.get('description', '') if form_data else game.description if game and game.description else ''}}" 
-                    required maxlength="250">
+                    maxlength="250">
             <div class="form-text text-white">Este campo no es obligatorio. (máx. 250 carácteres) </div>
         </div>
 
@@ -57,24 +57,22 @@
 
         <div class="mb-4">
             <label for="genre" class="form-label">Género Id</label>
-            <input type="number" 
-                    class="form-control" 
-                    id="genre" 
-                    name="genre_id" 
-                    value="{% if form_data and form_data.get('genre_id') %}{{ form_data.get('genre_id') }}{% elif game and game.genre_id is not none %}{{ game.genre_id }}{% endif %}" 
-                    min="0"
-                    step="1">
+            <select class="form-select" name="genre_id" id="genre_id">
+                <option value="">Selecciona un género</option>
+                {% for genre in genres %}
+                <option value="{{ genre.id }}" {% if form_data and form_data.get('genre_id')|int == genre.id %}selected{% elif game and game.genre_id == genre.id %}selected{% endif %}>{{ genre.name}}</option>
+                {% endfor %}
+            </select>
             <div class="form-text text-white">Este campo no es obligatorio.</div>
         </div>  
         <div class="mb-4">
             <label for="developer_id" class="form-label">Desarrolladora Id</label>
-            <input type="number" 
-                    class="form-control" 
-                    id="developer_id" 
-                    name="developer_id" 
-                    value="{% if form_data and form_data.get('developer_id') %}{{ form_data.get('developer_id') }}{% elif game and game.developer_id is not none %}{{ game.developer_id }}{% endif %}" 
-                    min="0"
-                    step="1">
+            <select class="form-select" name="developer_id" id="developer_id">
+                <option value="">Selecciona una desarrolladora</option>
+                {% for dev in devs %}
+                <option value="{{ dev.id }}" {% if form_data and form_data.get('developer_id')|int == dev.id %}selected{% elif game and game.developer_id == dev.id %}selected{% endif %}>{{ dev.name }}</option>
+                {% endfor %}
+            </select>
             <div class="form-text text-white">Este campo no es obligatorio.</div>
         </div>   
         <button type="submit" class="btn btn-primary">Submit</button>

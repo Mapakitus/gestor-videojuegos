@@ -17,28 +17,38 @@ router = APIRouter(prefix="/genres", tags=["web"])
 # list genres
 
 @router.get("", response_class=HTMLResponse)
-def list_genres(request: Request, db: Session = Depends(get_db)):
+def list_genres(request: Request, q: str | None = None, db: Session = Depends(get_db)):
     genres = db.execute(select(GenreORM).order_by(GenreORM.name.asc())).scalars().all()
+
+    result = None
+
+    if q and q.strip():
+        result = db.execute(select(VideogameORM).where(VideogameORM.title.ilike(f"%{q}%"))).scalars().all()
 
     return templates.TemplateResponse(
         "genre/list.html",
-        {"request": request, "genres": genres}
+        {"request": request, "genres": genres, "q":q, "result": result}
     )
 
 
 # videogame with same genre id
 
 @router.get("/{genre_id}", response_class=HTMLResponse)
-def genre_detail(request: Request ,genre_id: int, db: Session = Depends(get_db)):
+def genre_detail(request: Request ,genre_id: int, q: str | None = None, db: Session = Depends(get_db)):
     videogame = db.execute(select(VideogameORM).where(VideogameORM.genre_id == genre_id)).scalars().all()
     genre = db.execute(select(GenreORM).where(GenreORM.id == genre_id)).scalar_one_or_none()
 
     if genre is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"No existe ningún género con el id {genre_id}")
     
+    result = None
+
+    if q and q.strip():
+        result = db.execute(select(VideogameORM).where(VideogameORM.title.ilike(f"%{q}%"))).scalars().all()
+    
     return templates.TemplateResponse(
         "genre/detail.html",
-        {"request": request, "videogame": videogame, "genre": genre}
+        {"request": request, "videogame": videogame, "genre": genre, "result":result, "q": q}
     )
     
 

@@ -17,15 +17,21 @@ router = APIRouter(prefix="/videogame", tags=["web"])
 # LISTADO DE LA BIBLIOTECA DEL USUARIO POR DEFECTO
 # ========================
 @router.get("/library", response_class=HTMLResponse)
-def list_user_games(request: Request, db: Session = Depends(get_db)):
+def list_user_games(request: Request, q: str | None = None, db: Session = Depends(get_db)):
     USER_ID = 2
     user = db.get(UserORM, USER_ID)
     if not user:
         raise HTTPException(status_code=404, detail="Usuario por defecto no encontrado")
     games = user.videogames
+
+    result = None
+
+    if q and q.strip():
+        result = db.execute(select(VideogameORM).where(VideogameORM.title.ilike(f"%{q}%"))).scalars().all()
+
     return templates.TemplateResponse(
         "videogame/library.html",
-        {"request": request, "games": games}
+        {"request": request, "games": games, "q": q, "result": result}
     )
 
 
@@ -33,7 +39,7 @@ def list_user_games(request: Request, db: Session = Depends(get_db)):
 # DETALLE DEL VIDEOJUEGO
 # ========================
 @router.get("/{game_id}", response_class=HTMLResponse)
-def game_detail(game_id: int, request: Request, db: Session = Depends(get_db)):
+def game_detail(game_id: int, request: Request, q: str | None = None, db: Session = Depends(get_db)):
     stmt = select(VideogameORM).where(VideogameORM.id == game_id).options(
         selectinload(VideogameORM.reviews).selectinload(ReviewORM.user)
     )
@@ -50,6 +56,11 @@ def game_detail(game_id: int, request: Request, db: Session = Depends(get_db)):
     if user:
         user_review = next((r for r in videogame.reviews if r.user_id == user.id), None)
 
+    result = None
+
+    if q and q.strip():
+        result = db.execute(select(VideogameORM).where(VideogameORM.title.ilike(f"%{q}%"))).scalars().all()
+
     return templates.TemplateResponse(
         "videogame/detail.html",
         {
@@ -59,7 +70,9 @@ def game_detail(game_id: int, request: Request, db: Session = Depends(get_db)):
             "user": user,
             "has_game": has_game,
             "reviews": videogame.reviews or [],
-            "user_review": user_review
+            "user_review": user_review,
+            "q": q,
+            "result": result
         }
     )
 
@@ -101,3 +114,6 @@ def toggle_download(game_id: int, request: Request, db: Session = Depends(get_db
             "message": message
         }
     )
+
+
+

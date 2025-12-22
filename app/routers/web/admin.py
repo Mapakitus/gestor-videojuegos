@@ -19,24 +19,35 @@ router = APIRouter(prefix="/admin", tags=["admin"])
 
 # Endpoint para la página principal del panel de administración
 @router.get("", response_class=HTMLResponse)
-def admin_dashboard(request: Request):
+def admin_dashboard(request: Request, q: str | None = None, db: Session = Depends(get_db)):
     """
     Renderiza la página del panel de administración.
     """
+
+    result = None
+
+    if q and q.strip():
+        result = db.execute(select(VideogameORM).where(VideogameORM.title.ilike(f"%{q}%"))).scalars().all()
+
     return templates.TemplateResponse(
         "admin/dashboard.html",
-        {"request": request, "title": "Panel de Administración"}
+        {"request": request, "title": "Panel de Administración", "result": result, "q": q}
     )
 
 
 # Lista de videojuego admin
 @router.get("/videogame", response_class=HTMLResponse)
-def list_games(request: Request, db: Session = Depends(get_db)):
+def list_games(request: Request, q: str | None = None, db: Session = Depends(get_db)):
     games = db.execute(select(VideogameORM).order_by(VideogameORM.title)).scalars().all()
+
+    result = None
+
+    if q and q.strip():
+        result = db.execute(select(VideogameORM).where(VideogameORM.title.ilike(f"%{q}%"))).scalars().all()
 
     return templates.TemplateResponse(
         "admin/videogame.html",
-        {"request": request, "games": games}
+        {"request": request, "games": games, "result": result, "q": q}
     )
 
 
@@ -44,11 +55,16 @@ def list_games(request: Request, db: Session = Depends(get_db)):
 # CREAR NUEVO VIDEOJUEGO
 # ========================
 @router.get("/videogame/new", response_class=HTMLResponse)
-def form_create(request: Request, db: Session = Depends(get_db)):
+def form_create(request: Request, q: str | None = None, db: Session = Depends(get_db)):
     genres = db.execute(select(GenreORM).order_by(GenreORM.name)).scalars().all()
     devs = db.execute(select(DevORM).order_by(DevORM.name)).scalars().all()
 
-    return templates.TemplateResponse("videogame/form.html", {"request": request, "game": None, "genres": genres, "devs": devs})
+    result = None
+
+    if q and q.strip():
+        result = db.execute(select(VideogameORM).where(VideogameORM.title.ilike(f"%{q}%"))).scalars().all()
+
+    return templates.TemplateResponse("videogame/form.html", {"request": request, "game": None, "genres": genres, "devs": devs, "result": result, "q": q})
 
 @router.post("/videogame/new", response_class=HTMLResponse)
 def create(
@@ -104,8 +120,9 @@ def create(
 # ========================
 @router.get("/videogame/{game_id}/edit", response_class=HTMLResponse)
 def form_edit(
-    request: Request, 
+    request: Request,
     game_id: int,
+    q: str | None = None,
     db: Session = Depends(get_db) 
 ):
     
@@ -113,9 +130,14 @@ def form_edit(
     genres = db.execute(select(GenreORM).order_by(GenreORM.name)).scalars().all()
     devs = db.execute(select(DevORM).order_by(DevORM.name)).scalars().all()
 
+    result = None
+
+    if q and q.strip():
+        result = db.execute(select(VideogameORM).where(VideogameORM.title.ilike(f"%{q}%"))).scalars().all()
+
     return templates.TemplateResponse(
         "videogame/form.html",
-        {"request": request, "game": game, "genres": genres, "devs": devs}
+        {"request": request, "game": game, "genres": genres, "devs": devs, "result": result, "q": q}
     )
     
 # POST EDIT VIDEOGAME
@@ -188,12 +210,17 @@ def delete_game(request: Request, game_id: int, db: Session = Depends(get_db)):
 # list genres
 
 @router.get("/genre", response_class=HTMLResponse)
-def list_genres(request: Request, db: Session = Depends(get_db)):
+def list_genres(request: Request, q: str | None = None, db: Session = Depends(get_db)):
     genres = db.execute(select(GenreORM).order_by(GenreORM.name.asc())).scalars().all()
+
+    result = None
+
+    if q and q.strip():
+        result = db.execute(select(VideogameORM).where(VideogameORM.title.ilike(f"%{q}%"))).scalars().all()
 
     return templates.TemplateResponse(
         "admin/genre.html",
-        {"request": request, "genres": genres}
+        {"request": request, "genres": genres, "q":q, "result": result}
     )
 
 
@@ -201,10 +228,16 @@ def list_genres(request: Request, db: Session = Depends(get_db)):
 # show form create
 
 @router.get("/genre/new", response_class=HTMLResponse)
-def show_form_create(request: Request):
+def show_form_create(request: Request, q: str | None = None, db: Session = Depends(get_db)):
+
+    result = None
+
+    if q and q.strip():
+        result = db.execute(select(VideogameORM).where(VideogameORM.title.ilike(f"%{q}%"))).scalars().all()
+
     return templates.TemplateResponse(
         "genre/form.html",
-        {"request": request, "genre": None}
+        {"request": request, "genre": None, "q": q, "result": result}
     )
 
 # create new genre
@@ -265,15 +298,20 @@ def create_genre(
 # form edit genre
 
 @router.get("/genre/{genre_id}/edit", response_class=HTMLResponse)
-def show_form_edit(request: Request, genre_id: int, db: Session = Depends(get_db)):
+def show_form_edit(request: Request, genre_id: int, q: str | None = None, db: Session = Depends(get_db)):
     genre = db.execute(select(GenreORM).where(GenreORM.id == genre_id)).scalar_one_or_none()
 
     if genre is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No existe ningún género con este id")
     
+    result = None
+
+    if q and q.strip():
+        result = db.execute(select(VideogameORM).where(VideogameORM.title.ilike(f"%{q}%"))).scalars().all()
+    
     return templates.TemplateResponse(
         "genre/form.html",
-        {"request": request, "genre": genre}
+        {"request": request, "genre": genre, "result": result, "q": q}
     )
 
 # edit genre
@@ -356,21 +394,32 @@ def delete_genre(genre_id: int, db: Session = Depends(get_db)):
 # User List
 
 @router.get("/user", response_class=HTMLResponse)
-def list_users(request: Request, db: Session = Depends(get_db)):
+def list_users(request: Request, q: str | None = None, db: Session = Depends(get_db)):
     users = db.execute(select(UserORM)).scalars().all()
+
+    result = None
+
+    if q and q.strip():
+        result = db.execute(select(VideogameORM).where(VideogameORM.title.ilike(f"%{q}%"))).scalars().all()
 
     return templates.TemplateResponse(
         "admin/user.html",
-        {"request": request, "users": users}
+        {"request": request, "users": users, "result": result, "q": q}
     )
 
 # User create
 
 @router.get("/user/new", response_class=HTMLResponse)
-def form_user(request: Request):
+def form_user(request: Request, q: str | None = None, db: Session = Depends(get_db)):
+
+    result = None
+
+    if q and q.strip():
+        result = db.execute(select(VideogameORM).where(VideogameORM.title.ilike(f"%{q}%"))).scalars().all()
+
     return templates.TemplateResponse(
         "user/form.html",
-        {"request": request, "user": None}
+        {"request": request, "user": None, "result": result, "q": q}
     )
 
 # Post user create
@@ -438,12 +487,17 @@ def create_user(
 # Edit user
 
 @router.get("/user/{user_id}/edit", response_class=HTMLResponse)
-def edit_user(request: Request, user_id: int, db: Session = Depends(get_db)):
+def edit_user(request: Request, user_id: int, q: str | None = None, db: Session = Depends(get_db)):
     user = db.execute(select(UserORM).where(UserORM.id == user_id)).scalar_one_or_none()
+
+    result = None
+
+    if q and q.strip():
+        result = db.execute(select(VideogameORM).where(VideogameORM.title.ilike(f"%{q}%"))).scalars().all()
 
     return templates.TemplateResponse(
         "user/form.html",
-        {"request": request, "user": user}
+        {"request": request, "user": user, "result": result, "q": q}
     )
 
 # Post edit user
@@ -535,14 +589,19 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
 
 
 @router.get("/developer", response_class=HTMLResponse)
-def list_developers(request: Request, db: Session = Depends(get_db)):
+def list_developers(request: Request, q: str | None = None, db: Session = Depends(get_db)):
     """Muestra la lista de todas las desarrolladoras, ordenadas alfabéticamente."""
     developers = db.execute(select(DevORM).order_by(DevORM.name.asc())).scalars().all()
+
+    result = None
+
+    if q and q.strip():
+        result = db.execute(select(VideogameORM).where(VideogameORM.title.ilike(f"%{q}%"))).scalars().all()
 
     return templates.TemplateResponse(
         
         "admin/developer.html",
-        {"request": request, "developers": developers}
+        {"request": request, "developers": developers, "result": result, "q": q}
     )
 
 
@@ -552,12 +611,19 @@ def list_developers(request: Request, db: Session = Depends(get_db)):
 
 
 @router.get("/developer/new", response_class=HTMLResponse)
-def show_form_create(request: Request):
+def show_form_create(request: Request, q: str | None = None, db: Session = Depends(get_db)):
     """Muestra el formulario para crear una nueva desarrolladora."""
+
+
+    result = None
+
+    if q and q.strip():
+        result = db.execute(select(VideogameORM).where(VideogameORM.title.ilike(f"%{q}%"))).scalars().all()
+
     return templates.TemplateResponse(
         
         "developer/form.html",
-        {"request": request, "developer": None, "errors": None, "form_data": None}
+        {"request": request, "developer": None, "errors": None, "form_data": None, "result": result, "q": q}
     )
 
 
@@ -620,17 +686,22 @@ def create_developer(
 
 
 @router.get("/developer/{developer_id}/edit", response_class=HTMLResponse)
-def show_form_edit(request: Request, developer_id: int, db: Session = Depends(get_db)):
+def show_form_edit(request: Request, developer_id: int, q: str | None = None, db: Session = Depends(get_db)):
     """Muestra el formulario para editar una desarrolladora existente."""
     developer = db.execute(select(DevORM).where(DevORM.id == developer_id)).scalar_one_or_none()
 
     if developer is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="404 - Desarrolladora no encontrada")
     
+    result = None
+
+    if q and q.strip():
+        result = db.execute(select(VideogameORM).where(VideogameORM.title.ilike(f"%{q}%"))).scalars().all()
+    
     return templates.TemplateResponse(
         # Usa el mismo formulario de creación
         "developer/form.html",
-        {"request": request, "developer": developer}
+        {"request": request, "developer": developer, "result": result, "q": q}
     )
 
 

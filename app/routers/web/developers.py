@@ -15,14 +15,19 @@ router = APIRouter(prefix="/developers", tags=["web-developers"])
 
 
 @router.get("", response_class=HTMLResponse)
-def list_developers(request: Request, db: Session = Depends(get_db)):
+def list_developers(request: Request, q: str | None = None, db: Session = Depends(get_db)):
     """Muestra la lista de todas las desarrolladoras, ordenadas alfabéticamente."""
     developers = db.execute(select(DevORM).order_by(DevORM.name.asc())).scalars().all()
+
+    result = None
+
+    if q and q.strip():
+        result = db.execute(select(VideogameORM).where(VideogameORM.title.ilike(f"%{q}%"))).scalars().all()
 
     return templates.TemplateResponse(
         
         "developer/list.html",
-        {"request": request, "developers": developers}
+        {"request": request, "developers": developers, "q":q, "result": result}
     )
 
 

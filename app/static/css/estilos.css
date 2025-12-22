@@ -220,3 +220,13 @@ a.game-font:hover {
     background:#6c757d; /* gris bootstrap */
 }
 
+.nav-game {
+    border: 2px solid transparent;
+    transition: transform .2s;
+    background-color: #0f0f0f;
+}
+
+
+.nav-game:hover {
+    border-color: aqua;
+}

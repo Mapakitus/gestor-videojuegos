@@ -60,59 +60,6 @@ Este trabajo forma parte del curso **Python + IA**, y tiene como finalidad refor
 
 ---
 
-## [OK] mover rama lueyo
-## [OK] resetear main:
-  Opción 1: deshacer ultimos 8 commits:
-   - git reset --hard HEAD~8
-   - git push --force
-  Opción 2:
-    -manualmente colocar todo a un estado deseado
-## GESTOR VIDEOJUEGOS (ENTIDADES)
-
-## Videogame # (ManyToOne con Genero, ManyToOne Desarrolladora) (Paco)
-- id
-- title
-- description
-- genre_id (FK)
-- developer_id (FK)
-
-## Genre (Jon)
-- id
-- name
-
-## Developer (Lueyo)
-- id
-- name
-
-## User (Lueyo)
-- id
-- email
-- nif
-- password
-
-## UserGame
-- id
-- user_id (FK)
-- videogame_id (FK)
-- download_key (String único generado automáticamente)
-
-## Review
-- id
-- rating
-- comment
-- usergame_id (FK)
-
-
-## Schemas pydantic
-  - API REST CRUD
-  - HTMLs
-
-## Opcional autenticación:
-- registro.html
-- login.html
-- lógica para detectar el usuario autenticado en los controladores
-- opción simple: no hacer registro ni login, simplemente tener un usuario en base datos y vincular cada operación de Review o Compra a ese usuario
-
 🎮 Nuevo Modelo de Plataforma (tipo Netflix)
 
 Puntos clave:

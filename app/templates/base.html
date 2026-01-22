@@ -19,7 +19,7 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="offcanvas-end {% if result is not none %}show{% endif %} offcanvas" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel" data-bs-theme="dark">
+            <div class="offcanvas-end {% if result is not none %}show{% else %}{% endif %} offcanvas" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel" data-bs-theme="dark">
                 <div class="offcanvas-header">
                     <h5 class="navbar-brand" id="offcanvasNavbarLabel">GameLibrary</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -37,15 +37,15 @@
                         <a class="nav-link navbar-brand" href="/developers"><i class="fa-solid fa-building me-2"></i>Desarrolladoras</a>
                         </li>
                     </ul>
-                    <form method="get" action="{{ request.url.path }}" class="d-flex mt-3" role="search">
-                        <input class="form-control me-2" type="text" name="q" placeholder="Buscar videojuego" aria-label="Buscar" value="{% if q is none %}{% else %}{{ q }}{% endif %}" required>
+                    <form method="" action="" class="d-flex mt-3" role="search">
+                        <input class="form-control me-2" type="text" name="q" placeholder="Buscar videojuego" aria-label="Buscar" value="{% if q is not none %}{{ q }}{% endif %}" required>
                         <button class="btn btn-outline-success" type="submit">Buscar</button>
                     </form>
                     {% if result %}
                         {% for game in result %}
                         <a class="text-decoration-none text-white" href="/videogame/{{ game.id }}">
                             <div class="container-fluid nav-game mt-3 rounded-4 p-3 d-flex align-items-center" >
-                                <img class="img-fluid me-3" style="width: auto; height: 60px;" src="{{ game.cover_url }}" alt="">
+                                <img class="img-fluid me-3" style="width: auto; height: 60px;" src="{{ game.cover_url }}">
                                 <p class="text-truncate">
                                     {{ game.title }}
                                 </p>

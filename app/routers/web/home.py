@@ -18,8 +18,14 @@ router = APIRouter(prefix="", tags=["web"])
 def home(request: Request, q: str | None = None, db: Session = Depends(get_db)):
     videogame = db.execute(select(VideogameORM)).scalars().all()
     last_videogame = db.execute(select(VideogameORM).order_by(VideogameORM.id.desc()).limit(5)).scalars().all()    
-    games_action = db.execute(select(VideogameORM).join(VideogameORM.genre).where(GenreORM.name == "Acción").limit(3)).scalars().all()
-    games_aventure = db.execute(select(VideogameORM).join(VideogameORM.genre).where(GenreORM.name == "Aventura").limit(3)).scalars().all()
+    games_action = db.execute(select(VideogameORM).join(VideogameORM.genre).where(GenreORM.name == "Acción").limit(5)).scalars().all()
+    games_aventure = db.execute(select(VideogameORM).join(VideogameORM.genre).where(GenreORM.name == "Aventura").limit(5)).scalars().all()
+    genres = db.execute(select(GenreORM)).scalars().all()
+
+    games_by_genre = {}
+
+    for genre in genres:
+        games_by_genre[genre.id] = db.execute(select(VideogameORM).where(VideogameORM.genre_id == genre.id).limit(10)).scalars().all()
     
 
     result = None
@@ -30,5 +36,5 @@ def home(request: Request, q: str | None = None, db: Session = Depends(get_db)):
 
     return templates.TemplateResponse(
         "home.html",
-        {"request": request, "videogame": videogame, "last_videogame": last_videogame, "games_action": games_action, "games_aventure": games_aventure, "result": result, "q":q}
+        {"request": request, "videogame": videogame, "last_videogame": last_videogame, "games_action": games_action, "games_aventure": games_aventure, "result": result, "q":q, "genres": genres, "game_by_genre": games_by_genre}
     )

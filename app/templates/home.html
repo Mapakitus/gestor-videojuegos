@@ -25,21 +25,26 @@
         </a>
         {% endfor %}
     </div>
-
-    <!-- ACCIÓN -->
-    <h2 class="section-title">Acción</h2>
-    <div class="carousel-row">
-        {% for game in games_action %}
-        <a href="/videogame/{{ game.id }}" class="game">
-            <div class="game-card">
-                <img class="game-img" src="{{ game.cover_url }}">
-                <div class="p-2 d-flex justify-content-center">{{ game.title }}</div>
-            </div>
-        </a>
-        {% endfor %}
+    
+    {% for genre in genres%}
+    <!-- TODO LOS GENEROS -->
+    <div class="">
+        <h2 class="section-title">{{ genre.name }}</h2>
+        <div class="carousel-row">
+            {% for game in game_by_genre[genre.id] %}
+            <a href="/videogame/{{ game.id }}" class="game">
+                <div class="game-card ">
+                    <img class="game-img" src="{{ game.cover_url }}">
+                    <div class="p-2 d-flex justify-content-center">{{ game.title }}</div>
+                </div>
+            </a>
+            {% endfor %}
+            
+        </div>
     </div>
+    {% endfor %}
 
-    <!-- AVENTURA -->
+    <!-- AVENTURA
     <h2 class="section-title">Aventura</h2>
     <div class="carousel-row">
         {% for game in games_aventure %}
@@ -50,7 +55,7 @@
             </div>
         </a>
         {% endfor %}
-    </div>
+    </div> -->
 
     
     

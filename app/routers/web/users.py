@@ -7,6 +7,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.user import UserORM
+from app.models.videogame import VideogameORM
 
 
 templates = Jinja2Templates(directory="app/templates")
@@ -23,14 +24,19 @@ def list_users(request: Request, db: Session = Depends(get_db)):
     )
 
 @router.get("/{user_id}", response_class=HTMLResponse)
-def detail_by_id(request: Request, user_id: int, db: Session = Depends(get_db)):
+def detail_by_id(request: Request, user_id: int,  q: str | None = None, db: Session = Depends(get_db)):
     user = db.execute(select(UserORM).where(UserORM.id == user_id)).scalar_one_or_none()
+
+    result = None
+
+    if q and q.strip():
+        result = db.execute(select(VideogameORM).where(VideogameORM.title.ilike(f"%{q}%"))).scalars().all()
 
     if user is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"No existe ningún usuario con el id {user_id}")
     
     return templates.TemplateResponse(
         "user/profile.html",
-        {"request": request, "user": user}
+        {"request": request, "user": user, "q": q, "result": result}
     )
 

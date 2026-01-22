@@ -81,10 +81,16 @@ def game_detail(game_id: int, request: Request, q: str | None = None, db: Sessio
 # DESCARGAR / DESINSTALAR VIDEOJUEGO
 # ========================
 @router.post("/{game_id}/download", response_class=HTMLResponse)
-def toggle_download(game_id: int, request: Request, db: Session = Depends(get_db)):
+def toggle_download(game_id: int, request: Request, q: str | None = None, db: Session = Depends(get_db)):
     USER_ID = 2
     user = db.get(UserORM, USER_ID)
     game = db.get(VideogameORM, game_id)
+
+    result = None
+
+    if q and q.strip():
+        result = db.execute(select(VideogameORM).where(VideogameORM.title.ilike(f"%{q}%"))).scalars().all()
+
     if not user or not game:
         raise HTTPException(status_code=404, detail="Usuario o videojuego no encontrado")
 
@@ -111,7 +117,9 @@ def toggle_download(game_id: int, request: Request, db: Session = Depends(get_db
             "has_game": has_game,
             "reviews": game.reviews or [],
             "user_review": user_review,
-            "message": message
+            "message": message,
+            "q": q,
+            "result": result
         }
     )
 
